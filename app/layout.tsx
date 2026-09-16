@@ -62,6 +62,15 @@ export default function RootLayout({
             gtag('config', 'G-ECJR0J4REF');
           `}
         </Script>
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "yj6kw4s3qs");
+          `}
+        </Script>
         <Script id="knock-knock-widget" strategy="afterInteractive">
           {`
             window.company_id = '6a7b00dd939f9f6c9aaa74c3';
