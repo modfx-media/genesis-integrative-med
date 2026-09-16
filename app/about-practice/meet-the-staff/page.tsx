@@ -45,7 +45,7 @@ const jsonLd = [
         name: "Get to Know Our Expert Care Team | Genesis Integrative Med",
         isPartOf: { "@id": `${SITE_ORIGIN}/#website` },
         datePublished: "2022-07-21T00:00:00+00:00",
-        dateModified: "2026-04-09T09:36:00+00:00",
+        dateModified: "2026-09-16T00:00:00+00:00",
         description:
           "Meet the staff at Genesis Integrative Medicine to see how we care for your health.",
         breadcrumb: { "@id": `${CANONICAL}#breadcrumb` },
@@ -110,6 +110,19 @@ const jsonLd = [
           },
         },
       },
+      {
+        "@type": "ListItem",
+        position: 4,
+        item: {
+          "@type": "Person",
+          name: "Tori Sapienza Conroy",
+          jobTitle: "Community Outreach & Marketing Director",
+          worksFor: {
+            "@type": "MedicalClinic",
+            name: "Genesis Integrative Medicine",
+          },
+        },
+      },
     ],
   },
 ];
@@ -158,6 +171,20 @@ const STAFF = [
       "She loves improving the overall health & well-being of all her clients through our customized weight loss programs",
       "Losing weight is very personal and each client is unique in their journey. She very much enjoys figuring out with each client the absolute best path for them to reach their goals.",
       "Angela enjoys spending her free time with her family & friends, boating, floating, anything on the water, Glamping LOL, and nature walks/hikes!",
+    ],
+  },
+  {
+    name: "Tori Sapienza Conroy",
+    title: "Community Outreach & Marketing Director",
+    image: {
+      src: "/images/staff/tori-sapienza-conroy.png",
+      alt: "Tori Sapienza Conroy, Community Outreach & Marketing Director at Genesis Integrative Medicine",
+      width: 533,
+      height: 640,
+    },
+    bio: [
+      "Tori brings a background in nursing, pharmaceutical sales, and healthcare marketing to Genesis Integrative Medicine. She enjoys connecting with the community and helping patients feel welcomed and supported throughout their wellness journey.",
+      "Outside of the office, Tori loves spending time with her husband and three boys, cheering them on from the sidelines at their sporting events, and hanging out with her mini Goldendoodle sidekick, Apollo.",
     ],
   },
 ] as const;

@@ -29,7 +29,13 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 export type TeamMember = {
   name: string;
   title: string;
-  image: { src: string; alt: string; width: number; height: number };
+  image: {
+    src: string;
+    alt: string;
+    width: number;
+    height: number;
+    objectPosition?: string;
+  };
   bio?: readonly string[];
 };
 
@@ -426,8 +432,17 @@ function MemberPhoto({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const imgY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
-  const imgScale = useTransform(scrollYProgress, [0, 1], [1.05, 1.12]);
+  const pinTop = Boolean(member.image.objectPosition);
+  const imgY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    pinTop ? ["0%", "4%"] : ["-6%", "6%"],
+  );
+  const imgScale = useTransform(
+    scrollYProgress,
+    [0, 1],
+    pinTop ? [1.02, 1.06] : [1.05, 1.12],
+  );
 
   return (
     <motion.div
@@ -442,7 +457,7 @@ function MemberPhoto({
         {/* Image frame */}
         <div className="relative overflow-hidden rounded-[2rem] border border-brand-line bg-brand-ink shadow-2xl shadow-brand-navy/25">
           <motion.div
-            className="relative aspect-[4/5] w-full"
+            className={`relative aspect-[4/5] w-full ${pinTop ? "origin-top" : ""}`}
             style={reduce ? undefined : { y: imgY, scale: imgScale }}
           >
             <Image
@@ -456,6 +471,11 @@ function MemberPhoto({
               sizes="(max-width: 1024px) 130vw, 620px"
               quality={100}
               className="object-cover"
+              style={
+                member.image.objectPosition
+                  ? { objectPosition: member.image.objectPosition }
+                  : undefined
+              }
             />
           </motion.div>
           {/* Bottom wash */}
