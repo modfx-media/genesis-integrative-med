@@ -71,17 +71,9 @@ export function postsByCategory(category: string): readonly BlogPost[] {
  */
 export const BLOG_POSTS: readonly BlogPost[] = [
   {
-    slug: "understanding-neuropathy-treatment-options-in-geneva-il",
-    title: "Understanding Neuropathy Treatment Options in Geneva IL",
-    date: "2026-09-17",
-    excerpt: "Neuropathy can make simple daily tasks feel hard and frustrating. When your feet burn, tingle, or feel numb, walking across the room may feel like walking on pebbles. When your hands are weak or clumsy, buttoning a shirt or gripping the steering wheel can feel scary\u2026",
-    image: "/images/conditions/neuropathy.webp",
-    category: "Neuropathy",
-  },
-  {
     slug: "geneva-disc-pain-care-non-surgical-and-surgical-paths",
     title: "Questioning Disc Surgery? Disc Pain Specialists in Geneva Explain Options",
-    date: "2026-09-14",
+    date: "2026-09-17",
     excerpt: "Rethink Disc Surgery Before You Say Yes Back pain from disc problems can wear you down fast. After a summer of flare-ups, missed activities, and restless nights, it is easy to feel like surgery is the only way out\u2026",
     image: "/images/blog/geneva-disc-pain-care-non-surgical-and-surgical-paths.jpg",
     category: "Disc Pain",
@@ -89,10 +81,18 @@ export const BLOG_POSTS: readonly BlogPost[] = [
   {
     slug: "laser-lipo-effectiveness-for-stubborn-midlife-belly-fat",
     title: "Laser Lipo Effectiveness for Stubborn Midlife Belly Fat",
-    date: "2026-09-07",
+    date: "2026-09-14",
     excerpt: "Shrinking Stubborn Belly Fat Without Major Surgery Midlife belly fat can feel very unfair. You eat better than you did when you were younger, you try to move more, yet your waistband still feels tight\u2026",
     image: "/images/blog/laser-lipo-for-stubborn-belly-fat.webp",
     category: "Cold Laser",
+  },
+  {
+    slug: "understanding-neuropathy-treatment-options-in-geneva-il",
+    title: "Understanding Neuropathy Treatment Options in Geneva IL",
+    date: "2026-09-07",
+    excerpt: "Neuropathy can make simple daily tasks feel hard and frustrating. When your feet burn, tingle, or feel numb, walking across the room may feel like walking on pebbles. When your hands are weak or clumsy, buttoning a shirt or gripping the steering wheel can feel scary\u2026",
+    image: "/images/blog/understanding-neuropathy-treatment-options-in-geneva-il.png",
+    category: "Neuropathy",
   },
   {
     slug: "prp-for-sports-joint-injuries-timeline-return-to-play",
