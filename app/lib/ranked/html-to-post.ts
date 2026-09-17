@@ -199,8 +199,9 @@ export function nextUniquePublishDate(
 export function ensureUniquePublishDates<T extends { slug: string; publishDate: string }>(
   posts: T[],
   today = todayInNewYork(),
+  reservedDates: Iterable<string> = [],
 ): T[] {
-  const occupied = new Set<string>()
+  const occupied = new Set(Array.from(reservedDates, (date) => date.slice(0, 10)))
   const sorted = [...posts].sort(
     (a, b) => a.publishDate.localeCompare(b.publishDate) || a.slug.localeCompare(b.slug),
   )

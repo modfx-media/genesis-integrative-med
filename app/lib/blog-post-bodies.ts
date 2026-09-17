@@ -14,7 +14,7 @@ export const POST_PRP_VS_CORTISONE_VS_HYALURONIC_ACID_JOINT_INJECTION: BlogPostC
   slug: "prp-vs-cortisone-vs-hyaluronic-acid-joint-injection",
   title: "PRP vs. Cortisone vs. Hyaluronic Acid in Geneva: Which Joint Injection?",
   dek: "Joint pain has a way of showing up right when you want to be the most active. Training on the Fox River Trail, walking 18 holes, or playing in a tennis or pickleball league, all feel harder when your knee, hip, or shoulder aches with every step or swing. Many active adults in Geneva reach a point where rest and over-the-counter pain pills are...",
-  date: "2026-08-14",
+  date: "2026-08-17",
   category: "PRP",
   readTime: "7 min read",
   image: {
@@ -156,7 +156,7 @@ export const POST_NON_SURGICAL_BACK_PAIN_TREATMENT_THERAPIES: BlogPostContent = 
   slug: "non-surgical-back-pain-treatment-therapies",
   title: "Non-Surgical Back Pain Treatment: First Visit, Evaluation, and Therapies",
   dek: "Non-surgical back pain treatment is a real option for many people who want relief without surgery or long-term pain medication. When your back hurts, it can affect everything, from late-summer trips and golf outings to getting kids ready for school or keeping up with yard work. The goal is not just to feel better for a few days, but to...",
-  date: "2026-08-07",
+  date: "2026-08-10",
   category: "Back Pain",
   readTime: "7 min read",
   image: {
@@ -327,7 +327,7 @@ export const POST_SUMMER_SPORTS_INJURIES_HIP_PAIN_DOCTOR: BlogPostContent = {
   slug: "summer-sports-injuries-hip-pain-doctor",
   title: "Summer Sports Injuries in Geneva: When Hip Pain Needs a Doctor",
   dek: "Hip pain has a way of sneaking up on people during summer sports. One week you feel a little tight after a run on the Fox River trail, and the next week you are limping off the pickleball court or waking up at night from a deep ache in your hip. It can be hard to tell when it is normal...",
-  date: "2026-07-31",
+  date: "2026-08-03",
   category: "Hip Pain",
   readTime: "6 min read",
   image: {

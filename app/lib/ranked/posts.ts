@@ -8,6 +8,7 @@ import {
   isRankedPostLive,
   publishDateFromRanked,
   slugFromTitle,
+  todayInNewYork,
 } from './html-to-post'
 import { getLocalBlogPosts } from './local-posts'
 import type { BlogPostData, RankedContentDetail, RankedContentListItem } from './types'
@@ -107,7 +108,11 @@ export async function getLiveRankedBlogPosts(
       posts.push(post)
       taken.add(slug)
     }
-    return ensureUniquePublishDates(ensureUniqueCoverImages(posts))
+    return ensureUniquePublishDates(
+      ensureUniqueCoverImages(posts),
+      todayInNewYork(),
+      local.map((p) => p.publishDate),
+    )
   } catch (err) {
     console.error('[ranked] failed to load content calendar', err)
     return []
@@ -129,11 +134,14 @@ export async function getPublishedBlogPosts(): Promise<BlogPostData[]> {
   const ranked = await getLiveRankedBlogPosts()
   const taken = new Set(local.map((p) => p.slug))
   const localTitles = new Set(local.map((p) => normalizeTitle(p.title)))
-  const merged = [
+  const extras = ranked.filter(
+    (p) => !taken.has(p.slug) && !localTitles.has(normalizeTitle(p.title)),
+  )
+  // Keep authored local dates. Only Ranked extras may be shifted to avoid collisions.
+  return [
     ...local,
-    ...ranked.filter((p) => !taken.has(p.slug) && !localTitles.has(normalizeTitle(p.title))),
+    ...ensureUniquePublishDates(ensureUniqueCoverImages(extras), todayInNewYork(), local.map((p) => p.publishDate)),
   ]
-  return ensureUniquePublishDates(ensureUniqueCoverImages(merged))
 }
 
 export async function getPublishedBlogSlugs(): Promise<string[]> {

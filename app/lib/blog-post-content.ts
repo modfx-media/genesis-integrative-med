@@ -980,8 +980,8 @@ export const PRP_SPORTS_JOINT_INJURIES_TIMELINE_POST: BlogPostContent = {
   slug: "prp-for-sports-joint-injuries-timeline-return-to-play",
   title: "PRP for Sports Joint Injuries in Geneva: Timeline and Return to Play",
   dek: "Who qualifies for PRP, what week-by-week recovery looks like, and how to safely time your return to running, golf, tennis, or league play in Geneva.",
-  date: "2026-08-21",
-  modifiedDate: "2026-08-21",
+  date: "2026-08-24",
+  modifiedDate: "2026-08-24",
   category: "PRP",
   readTime: "7 min read",
   image: {
@@ -1144,8 +1144,8 @@ export const UNDERSTANDING_NEUROPATHY_TREATMENT_OPTIONS_POST: BlogPostContent = 
   slug: "understanding-neuropathy-treatment-options-in-geneva-il",
   title: "Understanding Neuropathy Treatment Options in Geneva IL",
   dek: "Neuropathy can make simple daily tasks feel hard and frustrating. When your feet burn, tingle, or feel numb, walking across the room may feel like walking on pebbles. When your hands are weak or clumsy, buttoning a shirt or gripping the steering wheel can feel scary. At Genesis Integrative Medicine, we talk with many people in Geneva, IL, who are dealing with this every day and just want clear answers and real options.",
-  date: "2026-08-28",
-  modifiedDate: "2026-08-28",
+  date: "2026-09-17",
+  modifiedDate: "2026-09-17",
   category: "Neuropathy",
   readTime: "5 min read",
   image: {
@@ -1274,8 +1274,8 @@ export const LASER_LIPO_EFFECTIVENESS_MIDLIFE_POST: BlogPostContent = {
   slug: "laser-lipo-effectiveness-for-stubborn-midlife-belly-fat",
   title: "Laser Lipo Effectiveness for Stubborn Midlife Belly Fat",
   dek: "Shrinking Stubborn Belly Fat Without Major Surgery",
-  date: "2026-09-04",
-  modifiedDate: "2026-09-04",
+  date: "2026-09-07",
+  modifiedDate: "2026-09-07",
   category: "Cold Laser",
   readTime: "4 min read",
   image: {
@@ -1401,8 +1401,8 @@ export const GENEVA_DISC_PAIN_CARE_POST: BlogPostContent = {
   slug: "geneva-disc-pain-care-non-surgical-and-surgical-paths",
   title: "Questioning Disc Surgery? Disc Pain Specialists in Geneva Explain Options",
   dek: "Back pain from disc problems can wear you down fast. After a summer of flare-ups, missed activities, and restless nights, it is easy to feel like surgery is the only way out. For many people with herniated or degenerative discs, there are other options worth exploring first.",
-  date: "2026-09-11",
-  modifiedDate: "2026-09-11",
+  date: "2026-09-14",
+  modifiedDate: "2026-09-14",
   category: "Disc Pain",
   readTime: "6 min read",
   image: {
