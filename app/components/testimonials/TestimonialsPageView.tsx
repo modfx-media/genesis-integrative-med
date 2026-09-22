@@ -14,55 +14,53 @@ import {
 } from "@/app/components/home/motion-primitives";
 import { CONTACT } from "@/app/lib/site-config";
 import { CONSULTATION_CTA, INSURANCE_MISSION } from "@/app/lib/services-content";
-import { GOOGLE_REVIEWS, type GoogleReview } from "@/app/lib/testimonials-content";
+import {
+  GoogleGIcon,
+  ReviewCard,
+  StarIcon,
+  StarRow,
+} from "@/app/components/testimonials/ReviewCard";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * /testimonials/, a CTA-first page pointing to the practice's live Google
- * Reviews profile, plus a grid of real reviews (see testimonials-content.ts)
- * transcribed verbatim from the Google Business Profile. No reviewer names
- * or quotes are fabricated; every card mirrors the source review's own text,
- * rating, and metadata (no owner replies are included).
+ * Reviews profile, plus a grid of 5-star reviews with written text. No
+ * reviewer names or quotes are fabricated. The badge shows Google's overall
+ * rating and total review count.
  */
 
 const WRITE_REVIEW_URL =
   "https://search.google.com/local/writereview?placeid=ChIJnc8OryDjDogRyMliAgrmNZI";
-const VIEW_REVIEWS_URL = CONTACT.reviewsUrl;
 
-const HEADLINE = "Over 200 5-Star Google Reviews" as const;
+export type TestimonialsViewItem = {
+  name: string;
+  quote: string;
+  when?: string;
+};
 
-const HIGHLIGHTS = [
-  {
-    icon: "star" as const,
-    label: "5-star average",
-    note: "Verified on Google",
-  },
-  {
-    icon: "people" as const,
-    label: "200+ reviews",
-    note: "Neighbors from Geneva &amp; the Fox Valley",
-  },
-  {
-    icon: "shield" as const,
-    label: "Verified &amp; unedited",
-    note: "Powered by Google Business",
-  },
-  {
-    icon: "heart" as const,
-    label: "Real patients",
-    note: "Real, in-their-own-words stories",
-  },
-] as const;
+export type TestimonialsViewProps = {
+  reviews: TestimonialsViewItem[];
+  rating: number;
+  reviewCount: number;
+  reviewsUrl: string;
+};
 
-export default function TestimonialsPageView() {
+export default function TestimonialsPageView({
+  reviews,
+  rating,
+  reviewCount,
+  reviewsUrl,
+}: TestimonialsViewProps) {
+  if (reviews.length === 0) return null;
+
   return (
     <article className="bg-white">
       <BreadcrumbBar />
-      <Hero />
-      <HighlightsStrip />
-      <ReviewsCTA />
-      <ReviewsGrid />
+      <Hero rating={rating} reviewCount={reviewCount} reviewsUrl={reviewsUrl} />
+      <HighlightsStrip rating={rating} reviewCount={reviewCount} />
+      <ReviewsCTA rating={rating} reviewCount={reviewCount} reviewsUrl={reviewsUrl} />
+      <ReviewsGrid reviews={reviews} />
       <TrustBlock />
       <ConsultationCta />
       <MissionBlock />
@@ -104,7 +102,15 @@ function BreadcrumbBar() {
 /* Hero                                                                        */
 /* -------------------------------------------------------------------------- */
 
-function Hero() {
+function Hero({
+  rating,
+  reviewCount,
+  reviewsUrl,
+}: {
+  rating: number;
+  reviewCount: number;
+  reviewsUrl: string;
+}) {
   const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -178,7 +184,7 @@ function Hero() {
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <StarRow />
             <p className="text-xl font-semibold text-brand-navy sm:text-2xl">
-              {HEADLINE}
+              {rating.toFixed(1)} from {reviewCount.toLocaleString()} Google reviews
             </p>
           </div>
         </Reveal>
@@ -193,7 +199,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <MagneticButton>
               <a
-                href={VIEW_REVIEWS_URL}
+                href={reviewsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-blue to-brand-cyan px-6 py-3.5 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-brand-blue/30 transition-shadow hover:shadow-xl hover:shadow-brand-blue/50"
@@ -221,7 +227,35 @@ function Hero() {
 /* Highlights strip                                                            */
 /* -------------------------------------------------------------------------- */
 
-function HighlightsStrip() {
+function HighlightsStrip({
+  rating,
+  reviewCount,
+}: {
+  rating: number;
+  reviewCount: number;
+}) {
+  const highlights = [
+    {
+      icon: "star" as const,
+      label: `${rating.toFixed(1)} Google rating`,
+      note: "Verified on Google",
+    },
+    {
+      icon: "people" as const,
+      label: `${reviewCount.toLocaleString()} reviews`,
+      note: "Neighbors from Geneva &amp; the Fox Valley",
+    },
+    {
+      icon: "shield" as const,
+      label: "Verified &amp; unedited",
+      note: "Powered by Google Business",
+    },
+    {
+      icon: "heart" as const,
+      label: "Real patients",
+      note: "Real, in-their-own-words stories",
+    },
+  ] as const;
   return (
     <section className="border-y border-brand-line bg-white">
       <div className="mx-auto max-w-7xl px-6 py-10">
@@ -229,7 +263,7 @@ function HighlightsStrip() {
           className="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4"
           gap={0.06}
         >
-          {HIGHLIGHTS.map((h) => (
+          {highlights.map((h) => (
             <StaggerItem key={h.label}>
               <div className="group flex items-start gap-3">
                 <span
@@ -261,7 +295,15 @@ function HighlightsStrip() {
 /* Reviews CTA, mirrors what actually lives on the page                       */
 /* -------------------------------------------------------------------------- */
 
-function ReviewsCTA() {
+function ReviewsCTA({
+  rating,
+  reviewCount,
+  reviewsUrl,
+}: {
+  rating: number;
+  reviewCount: number;
+  reviewsUrl: string;
+}) {
   const reduce = useReducedMotion();
   return (
     <section className="relative bg-white py-16 sm:py-24">
@@ -305,7 +347,7 @@ function ReviewsCTA() {
                 <div className="mt-8 flex flex-wrap gap-3">
                   <MagneticButton>
                     <a
-                      href={VIEW_REVIEWS_URL}
+                      href={reviewsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-brand-blue to-brand-cyan px-6 py-3.5 text-xs font-bold uppercase tracking-[0.12em] text-white shadow-lg shadow-brand-blue/30 transition-shadow hover:shadow-xl hover:shadow-brand-blue/50"
@@ -326,7 +368,7 @@ function ReviewsCTA() {
               </div>
 
               <div className="lg:col-span-5">
-                <ScoreCard />
+                <ScoreCard rating={rating} reviewCount={reviewCount} />
               </div>
             </div>
           </div>
@@ -336,7 +378,13 @@ function ReviewsCTA() {
   );
 }
 
-function ScoreCard() {
+function ScoreCard({
+  rating,
+  reviewCount,
+}: {
+  rating: number;
+  reviewCount: number;
+}) {
   return (
     <div className="relative overflow-hidden rounded-3xl border border-brand-line bg-white p-6 shadow-lg shadow-brand-navy/5 sm:p-8">
       <div
@@ -355,7 +403,7 @@ function ScoreCard() {
         </div>
       </div>
       <div className="mt-6 flex items-end gap-3">
-        <p className="text-5xl font-extrabold leading-none text-brand-navy">5.0</p>
+        <p className="text-5xl font-extrabold leading-none text-brand-navy">{rating.toFixed(1)}</p>
         <div className="pb-1">
           <StarRow />
           <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-ink/60">
@@ -365,7 +413,7 @@ function ScoreCard() {
       </div>
       <div className="mt-6 grid grid-cols-2 gap-3 border-t border-brand-line pt-6">
         <div>
-          <p className="text-2xl font-extrabold text-brand-blue">200+</p>
+          <p className="text-2xl font-extrabold text-brand-blue">{reviewCount.toLocaleString()}</p>
           <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-ink/60">
             Verified reviews
           </p>
@@ -385,13 +433,9 @@ function ScoreCard() {
 /* Reviews grid, verbatim Google reviews                                      */
 /* -------------------------------------------------------------------------- */
 
-const REVIEW_ACCENTS = [
-  "from-brand-blue to-brand-cyan",
-  "from-brand-navy to-brand-blue",
-  "from-brand-cyan to-brand-sky",
-] as const;
+function ReviewsGrid({ reviews }: { reviews: TestimonialsViewItem[] }) {
+  if (reviews.length === 0) return null;
 
-function ReviewsGrid() {
   return (
     <section className="bg-brand-mist/40 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-6">
@@ -404,48 +448,18 @@ function ReviewsGrid() {
           </h2>
         </Reveal>
         <div className="mt-12 columns-1 gap-6 sm:columns-2 lg:columns-3">
-          {GOOGLE_REVIEWS.map((review, i) => (
-            <ReviewCard key={review.name + i} review={review} index={i} />
+          {reviews.map((review, i) => (
+            <ReviewCard
+              key={review.name + i}
+              name={review.name}
+              quote={review.quote}
+              when={review.when ?? "Posted on Google"}
+              index={i}
+            />
           ))}
         </div>
       </div>
     </section>
-  );
-}
-
-function ReviewCard({ review, index }: { review: GoogleReview; index: number }) {
-  const accent = REVIEW_ACCENTS[index % REVIEW_ACCENTS.length];
-  return (
-    <div className="mb-6 break-inside-avoid-column rounded-3xl border border-brand-line bg-white p-6 shadow-sm shadow-brand-navy/5">
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
-          <span
-            aria-hidden
-            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${accent} text-sm font-bold text-white`}
-          >
-            {review.name.charAt(0)}
-          </span>
-          <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-brand-navy">{review.name}</p>
-            <p className="truncate text-xs text-brand-ink/55">{review.meta}</p>
-          </div>
-        </div>
-        <GoogleGIcon className="h-4 w-4 shrink-0 text-brand-ink/25" />
-      </div>
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-0.5" aria-label={`${review.rating} out of 5 stars`}>
-          {Array.from({ length: review.rating }).map((_, si) => (
-            <StarIcon key={si} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-          ))}
-        </div>
-        <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-brand-ink/45">
-          {review.time}
-        </span>
-      </div>
-      {review.text && (
-        <p className="mt-3 text-sm leading-relaxed text-brand-ink/75">{review.text}</p>
-      )}
-    </div>
   );
 }
 
@@ -598,30 +612,8 @@ function MissionBlock() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Small components                                                            */
-/* -------------------------------------------------------------------------- */
-
-function StarRow() {
-  return (
-    <div className="flex items-center gap-0.5" aria-label="5 out of 5 stars">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <StarIcon key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />
-      ))}
-    </div>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
 /* Icons                                                                       */
 /* -------------------------------------------------------------------------- */
-
-function StarIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path d="M12 2.5 15 9l7 .8-5.2 4.6L18.3 22 12 18.4 5.7 22 7.2 14.4 2 9.8 9 9Z" />
-    </svg>
-  );
-}
 
 function ArrowRight(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -632,18 +624,6 @@ function ArrowRight(props: React.SVGProps<SVGSVGElement>) {
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function GoogleGIcon(props: React.SVGProps<SVGSVGElement>) {
-  // Simple monochrome "G" glyph so we don't render the trademarked color logo.
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M12 4a8 8 0 1 0 7.7 10H12v-3.5h9.5A9.5 9.5 0 1 1 12 2.5c2.3 0 4.4.8 6 2.2l-2.4 2.4A5 5 0 0 0 12 6a6 6 0 0 0 0 12 5.6 5.6 0 0 0 5.4-4H12V4Z"
-        fill="currentColor"
       />
     </svg>
   );

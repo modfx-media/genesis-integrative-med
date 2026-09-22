@@ -7,6 +7,8 @@ import BookingPopupProvider from "@/app/components/booking/BookingPopupProvider"
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import { BRAND } from "@/app/lib/site-config";
+import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
+import { buildGoogleReviewsJsonLd } from "@/lib/google-reviews-jsonld";
 
 import "./globals.css";
 
@@ -32,21 +34,32 @@ export const metadata: Metadata = {
     "Integrative medicine in Geneva, IL, chiropractic, regenerative medicine, PRP, peptide weight loss, cold laser, and more.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { reviews, meta } = await getDisplayedGoogleReviews();
+  const reviewsJsonLd = buildGoogleReviewsJsonLd(reviews, meta);
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-white text-brand-ink">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }}
+        />
         <BookingPopupProvider>
           <Header />
           <main className="flex flex-1 flex-col">{children}</main>
-          <Footer />
+          <Footer
+            reviewsUrl={meta.reviewsUrl}
+            rating={meta.rating}
+            reviewCount={meta.reviewCount}
+          />
           <BookNowBanner />
         </BookingPopupProvider>
         <Script

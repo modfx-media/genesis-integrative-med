@@ -105,8 +105,7 @@ export const CONTACT = {
     "https://www.google.com/maps/dir/?api=1&destination=1881+S.+Randall+Rd+Suite+C+Geneva+IL+60134",
   bookingUrl:
     "https://api.leadconnectorhq.com/widget/booking/arjP5TnMoJyvrPcTYI8Z",
-  reviewsUrl:
-    "https://www.google.com/search?q=genesis+integrative+med+geneva+il",
+  reviewsUrl: "https://maps.google.com/?cid=10535579833967233480",
   careCreditUrl: "https://www.carecredit.com/apply/?sitecode=bb3lopc06182018",
   hours: [
     { day: "Mon / Wed", time: "9AM – 12PM, 3PM – 6PM" },

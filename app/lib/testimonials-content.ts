@@ -1,10 +1,7 @@
 /**
- * Verbatim Google Reviews for Genesis Integrative Medicine, transcribed
- * from the practice's live Google Business Profile. Text is preserved
- * exactly as each patient wrote it (including their own typos) per the
- * testimonials page's "in their own words, no paraphrasing" promise.
- * Every review is presented at its actual 5-star rating; no business
- * owner replies are included.
+ * Legacy review list. Live 5-star Google reviews now come from
+ * lib/reviews.ts + lib/google-reviews.ts. Keep this file only as a
+ * historical transcript; do not render it unfiltered.
  */
 
 export type GoogleReview = {

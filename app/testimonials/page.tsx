@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 
 import TestimonialsPageView from "@/app/components/testimonials/TestimonialsPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
+import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
+import { isFiveStarReview } from "@/lib/reviews";
 
 const CANONICAL = "https://genesisintegrativemed.com/testimonials/";
 
 const TITLE = "Testimonials | Genesis Integrative Medicine";
 const DESCRIPTION =
-  "Over 200 five-star Google reviews from patients of Genesis Integrative Medicine in Geneva, IL. Read verified testimonials and share your own experience.";
+  "Read 5-star Google reviews from patients of Genesis Integrative Medicine in Geneva, IL. Verified testimonials in their own words.";
 
 export const metadata: Metadata = {
   title: TITLE,
@@ -54,18 +56,29 @@ const jsonLd = [
   },
 ];
 
-export default function TestimonialsPage() {
+export default async function TestimonialsPage() {
+  const { reviews, meta } = await getDisplayedGoogleReviews();
+  const visible = reviews.filter(isFiveStarReview);
+
   return (
     <>
       {jsonLd.map((block, i) => (
         <script
           key={i}
           type="application/ld+json"
-           
           dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
         />
       ))}
-      <TestimonialsPageView />
+      <TestimonialsPageView
+        reviews={visible.map((review) => ({
+          name: review.name,
+          quote: review.quote,
+          when: review.relativeTime ?? "Posted on Google",
+        }))}
+        rating={meta.rating}
+        reviewCount={meta.reviewCount}
+        reviewsUrl={meta.reviewsUrl}
+      />
     </>
   );
 }

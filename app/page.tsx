@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { GoogleReviews } from "@/app/components/home/GoogleReviews";
+import { HomeTestimonials } from "@/app/components/home/HomeTestimonials";
 import {
   ConditionsShowcase,
   ConditionsStripSection,
@@ -18,6 +20,7 @@ import {
 } from "@/app/components/home/HomeSections";
 import { HOME_META } from "@/app/lib/home-content";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
+import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
 
 const CANONICAL = `${SITE_ORIGIN}/`;
 
@@ -195,7 +198,22 @@ const medicalClinicJsonLd = {
   ],
 };
 
-export default function Home() {
+export default async function Home() {
+  const { meta } = await getDisplayedGoogleReviews();
+  const clinicJsonLd = {
+    ...medicalClinicJsonLd,
+    ...(meta.rating > 0 && meta.reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: meta.rating,
+            reviewCount: meta.reviewCount,
+            bestRating: "5",
+          },
+        }
+      : {}),
+  };
+
   return (
     <>
       <script
@@ -212,10 +230,14 @@ export default function Home() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(medicalClinicJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicJsonLd) }}
       />
 
-      <HomeHero />
+      <HomeHero
+        rating={meta.rating}
+        reviewCount={meta.reviewCount}
+        reviewsUrl={meta.reviewsUrl}
+      />
       <InsuranceStrip />
       <ServiceCards />
       <ServicesShowcase />
@@ -224,8 +246,22 @@ export default function Home() {
       <UnlockPainFreeSection />
       <DoctorSnippet />
       <WhyChooseUsSection />
+      <GoogleReviews>
+        {({ reviews, meta: reviewMeta }) => (
+          <HomeTestimonials
+            items={reviews.map((review) => ({
+              name: review.name,
+              quote: review.quote,
+              when: review.relativeTime ?? "Posted on Google",
+            }))}
+            rating={reviewMeta.rating}
+            reviewCount={reviewMeta.reviewCount}
+            reviewsUrl={reviewMeta.reviewsUrl}
+          />
+        )}
+      </GoogleReviews>
       <ConditionsShowcase />
-      <ConditionsStripSection />
+      <ConditionsStripSection reviewsUrl={meta.reviewsUrl} />
       <VideosShowcase />
       <GetStartedSection />
       <ContactSection />

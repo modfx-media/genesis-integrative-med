@@ -41,7 +41,15 @@ import {
 /* Hero                                                                       */
 /* -------------------------------------------------------------------------- */
 
-export function HomeHero() {
+export function HomeHero({
+  rating,
+  reviewCount,
+  reviewsUrl = CONTACT.reviewsUrl,
+}: {
+  rating?: number;
+  reviewCount?: number;
+  reviewsUrl?: string;
+} = {}) {
   const ref = useRef<HTMLElement>(null);
   const visualRef = useRef<HTMLDivElement>(null);
   const { sx, sy, reduce } = useSpotlight(ref);
@@ -229,7 +237,7 @@ export function HomeHero() {
             {/* Footer: reviews + location */}
             <div className="relative mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-brand-line pt-5">
               <a
-                href={CONTACT.reviewsUrl}
+                href={reviewsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2"
@@ -240,7 +248,9 @@ export function HomeHero() {
                   ))}
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy transition-colors group-hover:text-brand-blue">
-                  Read reviews
+                  {rating && reviewCount
+                    ? `${rating.toFixed(1)} · ${reviewCount.toLocaleString()} Google reviews`
+                    : "Read reviews"}
                 </span>
               </a>
               <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-ink/60">
@@ -2134,7 +2144,11 @@ export function WhyChooseUsSection() {
 /* Conditions strip                                                           */
 /* -------------------------------------------------------------------------- */
 
-export function ConditionsStripSection() {
+export function ConditionsStripSection({
+  reviewsUrl = CONTACT.reviewsUrl,
+}: {
+  reviewsUrl?: string;
+} = {}) {
   const reduce = useReducedMotion();
   return (
     <section className="relative overflow-hidden bg-white py-20 sm:py-24">
@@ -2162,7 +2176,7 @@ export function ConditionsStripSection() {
         {/* Reviews badge centered */}
         <Reveal delay={0.1} className="mt-6 flex justify-center">
           <a
-            href={CONDITIONS_STRIP.reviewsLink.href}
+            href={reviewsUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 rounded-full border border-brand-line bg-white px-3 py-1.5 shadow-sm transition-shadow hover:shadow-md"

@@ -13,8 +13,20 @@ import {
  * - Four-column layout on desktop, stacks on mobile
  * - Reversed (white) logo, quick links, hours, Google review + social
  */
-export default function Footer() {
+export default function Footer({
+  reviewsUrl = CONTACT.reviewsUrl,
+  rating,
+  reviewCount,
+}: {
+  reviewsUrl?: string;
+  rating?: number;
+  reviewCount?: number;
+} = {}) {
   const year = new Date().getFullYear();
+  const reviewsLabel =
+    rating && reviewCount
+      ? `${rating.toFixed(1)} · ${reviewCount.toLocaleString()} Google Reviews`
+      : "Read our Google Reviews";
 
   return (
     <footer className="relative overflow-hidden bg-brand-ink text-white">
@@ -54,14 +66,14 @@ export default function Footer() {
             </p>
 
             <a
-              href={CONTACT.reviewsUrl}
+              href={reviewsUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/[0.03] px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.1em] text-white/90 backdrop-blur-sm transition-colors hover:border-brand-cyan/50 hover:bg-white/[0.06]"
             >
               <GoogleGIcon className="h-4 w-4" />
               <span className="flex items-center gap-1.5">
-                <span className="text-white">Read our Google Reviews</span>
+                <span className="text-white">{reviewsLabel}</span>
                 <ArrowRightIcon className="h-3 w-3" />
               </span>
             </a>
