@@ -17,8 +17,7 @@ type PageProps = {
 };
 
 /**
- * Prefer the hand-tuned / compiled post so a Ranked import cannot overwrite it.
- * Ranked-only slugs map into the existing article template.
+ * Ranked CMS integration is disabled; this always resolves from local content.
  */
 async function resolvePost(slug: string): Promise<BlogPostContent | undefined> {
   const local = getBlogPost(slug) ?? BLOG_POST_BODIES[slug];
