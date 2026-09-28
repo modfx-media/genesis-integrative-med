@@ -71,6 +71,14 @@ export function postsByCategory(category: string): readonly BlogPost[] {
  */
 export const BLOG_POSTS: readonly BlogPost[] = [
   {
+    slug: "prp-candidates-for-arthritis-and-sports-injuries",
+    title: "PRP Candidates for Arthritis and Sports Injuries",
+    date: "2026-09-28",
+    excerpt: "How PRP Joint Treatment Helps You Stay Active Longer Joint pain can make it hard to stay active, whether you are dealing with arthritis or a nagging sports injury. Many people want relief but do not want surgery or long-term pain medications\u2026",
+    image: "/images/blog/prp-candidates-for-arthritis-and-sports-injuries-young.jpg",
+    category: "PRP",
+  },
+  {
     slug: "medical-weight-loss-options-in-geneva-il-explained",
     title: "Inside Medical Weight Loss in Geneva IL: Beyond Quick-Fix Diets",
     date: "2026-09-21",
