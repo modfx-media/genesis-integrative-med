@@ -244,6 +244,17 @@ export default function Footer({
             </Link>
           </div>
         </div>
+
+        <div className="mt-4 text-center text-[11px] uppercase tracking-[0.14em] text-white/40 sm:text-right">
+          <a
+            href="https://modfxmedia.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white/80"
+          >
+            Powered by ModFxMedia
+          </a>
+        </div>
       </div>
     </footer>
   );
