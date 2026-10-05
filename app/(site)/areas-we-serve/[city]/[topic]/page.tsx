@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 import {
@@ -37,7 +40,7 @@ export async function generateMetadata({
   const topic = getTopic(topicSlug);
   if (!city || !topic) return {};
   const content = buildAreaComboContent(city, topic);
-  return {
+  return cmsMetadata(`/areas-we-serve/${citySlug}/${topicSlug}`, {
     title: content.meta.title,
     description: content.meta.description,
     alternates: { canonical: content.meta.canonicalOrigin },
@@ -56,7 +59,7 @@ export async function generateMetadata({
       description: content.meta.description,
       images: [content.meta.ogImage],
     },
-  };
+  });
 }
 
 export default async function AreaComboPage({ params }: PageProps) {
@@ -72,6 +75,7 @@ export default async function AreaComboPage({ params }: PageProps) {
   });
 
   return (
+    <CMSRoute path={`/areas-we-serve/${citySlug}/${topicSlug}`}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -83,5 +87,6 @@ export default async function AreaComboPage({ params }: PageProps) {
       ))}
       <ServicePageTemplate content={content} />
     </>
+  </CMSRoute>
   );
 }

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { HEADACHES_CONTENT } from "@/app/lib/conditions-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: HEADACHES_CONTENT.meta.title,
   description: HEADACHES_CONTENT.meta.description,
   alternates: { canonical: HEADACHES_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/conditions-treated/headaches", FALLBACK_METADATA);
+}
+
 export default function HeadachesPage() {
   const blocks = buildServicePageJsonLd(HEADACHES_CONTENT, {
     datePublished: "2022-07-21T00:00:00+00:00",
@@ -32,6 +39,7 @@ export default function HeadachesPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/conditions-treated/headaches"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -43,5 +51,6 @@ export default function HeadachesPage() {
       ))}
       <ServicePageTemplate content={HEADACHES_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

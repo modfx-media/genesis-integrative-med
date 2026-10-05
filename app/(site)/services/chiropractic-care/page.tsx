@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { CHIROPRACTIC_CARE_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: CHIROPRACTIC_CARE_CONTENT.meta.title,
   description: CHIROPRACTIC_CARE_CONTENT.meta.description,
   alternates: { canonical: CHIROPRACTIC_CARE_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/chiropractic-care", FALLBACK_METADATA);
+}
+
 export default function ChiropracticCarePage() {
   const blocks = buildServicePageJsonLd(CHIROPRACTIC_CARE_CONTENT, {
     datePublished: "2022-07-21T00:00:00+00:00",
@@ -32,6 +39,7 @@ export default function ChiropracticCarePage() {
     faqEnabled: true,
   });
   return (
+    <CMSRoute path={"/services/chiropractic-care"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -43,5 +51,6 @@ export default function ChiropracticCarePage() {
       ))}
       <ServicePageTemplate content={CHIROPRACTIC_CARE_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

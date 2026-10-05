@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { ACTIVE_REHAB_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: ACTIVE_REHAB_CONTENT.meta.title,
   description: ACTIVE_REHAB_CONTENT.meta.description,
   alternates: { canonical: ACTIVE_REHAB_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/active-rehab-geneva", FALLBACK_METADATA);
+}
+
 export default function ActiveRehabPage() {
   // Active Rehab page has no formal FAQ block on the live site.
   const blocks = buildServicePageJsonLd(ACTIVE_REHAB_CONTENT, {
@@ -33,6 +40,7 @@ export default function ActiveRehabPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/services/active-rehab-geneva"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -44,5 +52,6 @@ export default function ActiveRehabPage() {
       ))}
       <ServicePageTemplate content={ACTIVE_REHAB_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

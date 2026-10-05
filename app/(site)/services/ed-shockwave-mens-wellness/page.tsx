@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { ED_SHOCKWAVE_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: ED_SHOCKWAVE_CONTENT.meta.title,
   description: ED_SHOCKWAVE_CONTENT.meta.description,
   alternates: { canonical: ED_SHOCKWAVE_CONTENT.meta.canonicalOrigin },
@@ -32,6 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/ed-shockwave-mens-wellness", FALLBACK_METADATA);
+}
+
 export default function EdShockwavePage() {
   const blocks = buildServicePageJsonLd(ED_SHOCKWAVE_CONTENT, {
     datePublished: "2025-10-01T00:00:00+00:00",
@@ -39,6 +46,7 @@ export default function EdShockwavePage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/services/ed-shockwave-mens-wellness"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -50,5 +58,6 @@ export default function EdShockwavePage() {
       ))}
       <ServicePageTemplate content={ED_SHOCKWAVE_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

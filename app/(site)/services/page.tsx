@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicesIndexView from "@/app/components/services/ServicesIndexView";
 import {
   SERVICES_INDEX_META,
 } from "@/app/lib/services-content";
 import { buildServicesIndexJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: SERVICES_INDEX_META.title,
   description: SERVICES_INDEX_META.description,
   alternates: { canonical: SERVICES_INDEX_META.canonicalOrigin },
@@ -27,6 +30,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services", FALLBACK_METADATA);
+}
+
 export default function ServicesIndexPage() {
   const blocks = buildServicesIndexJsonLd({
     title: SERVICES_INDEX_META.title,
@@ -37,6 +44,7 @@ export default function ServicesIndexPage() {
     dateModified: SERVICES_INDEX_META.dateModified,
   });
   return (
+    <CMSRoute path={"/services"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -48,5 +56,6 @@ export default function ServicesIndexPage() {
       ))}
       <ServicesIndexView />
     </>
+  </CMSRoute>
   );
 }

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import { GoogleReviews } from "@/app/components/home/GoogleReviews";
 import { HomeTestimonials } from "@/app/components/home/HomeTestimonials";
 import {
@@ -24,7 +27,7 @@ import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
 
 const CANONICAL = `${SITE_ORIGIN}/`;
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: HOME_META.title,
   description: HOME_META.description,
   alternates: { canonical: CANONICAL },
@@ -42,6 +45,10 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image" },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/", FALLBACK_METADATA);
+}
 
 /**
  * JSON-LD graph, replicated from the live homepage per the migration brief.
@@ -215,6 +222,7 @@ export default async function Home() {
   };
 
   return (
+    <CMSRoute path={"/"}>
     <>
       <script
         type="application/ld+json"
@@ -266,5 +274,6 @@ export default async function Home() {
       <GetStartedSection />
       <ContactSection />
     </>
+  </CMSRoute>
   );
 }

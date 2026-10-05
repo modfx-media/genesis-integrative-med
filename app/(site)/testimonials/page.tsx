@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import TestimonialsPageView from "@/app/components/testimonials/TestimonialsPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
@@ -11,7 +14,7 @@ const TITLE = "Testimonials | Genesis Integrative Medicine";
 const DESCRIPTION =
   "Read 5-star Google reviews from patients of Genesis Integrative Medicine in Geneva, IL. Verified testimonials in their own words.";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
@@ -29,6 +32,10 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/testimonials", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -61,6 +68,7 @@ export default async function TestimonialsPage() {
   const visible = reviews.filter(isFiveStarReview);
 
   return (
+    <CMSRoute path={"/testimonials"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -80,5 +88,6 @@ export default async function TestimonialsPage() {
         reviewsUrl={meta.reviewsUrl}
       />
     </>
+  </CMSRoute>
   );
 }

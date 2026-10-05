@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import LegalPageView from "@/app/components/legal/LegalPageView";
 import { TERMS_PAGE } from "@/app/lib/legal-content";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL = TERMS_PAGE.meta.canonical;
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: TERMS_PAGE.meta.title,
   description: TERMS_PAGE.meta.description,
   alternates: { canonical: CANONICAL },
@@ -24,6 +27,10 @@ export const metadata: Metadata = {
     description: TERMS_PAGE.meta.description,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/our-terms", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -53,6 +60,7 @@ const jsonLd = [
 
 export default function OurTermsPage() {
   return (
+    <CMSRoute path={"/our-terms"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -63,5 +71,6 @@ export default function OurTermsPage() {
       ))}
       <LegalPageView page={TERMS_PAGE} />
     </>
+  </CMSRoute>
   );
 }

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import type { ServicePageContent } from "@/app/lib/services-content";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
@@ -22,7 +25,7 @@ const DESCRIPTION =
   "Discover lipo peptides for weight loss in Geneva at Genesis Integrative Medicine. Enhance fat burning, boost metabolism, and preserve lean muscle with a holistic, personalized plan.";
 const OG_IMAGE = "/images/services/medical-weight-loss-card.jpg";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
@@ -42,6 +45,10 @@ export const metadata: Metadata = {
     images: [OG_IMAGE],
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/lipo-peptides-weight", FALLBACK_METADATA);
+}
 
 /**
  * Conditions Treated links from the live page sidebar, remapped from the
@@ -230,6 +237,7 @@ const jsonLd = [
 
 export default function LipoPeptidesWeightPage() {
   return (
+    <CMSRoute path={"/lipo-peptides-weight"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -241,5 +249,6 @@ export default function LipoPeptidesWeightPage() {
       ))}
       <ServicePageTemplate content={CONTENT} />
     </>
+  </CMSRoute>
   );
 }

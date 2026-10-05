@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { HERNIATED_DISC_CONTENT } from "@/app/lib/conditions-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: HERNIATED_DISC_CONTENT.meta.title,
   description: HERNIATED_DISC_CONTENT.meta.description,
   alternates: { canonical: HERNIATED_DISC_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/conditions-treated/herniated-disc", FALLBACK_METADATA);
+}
+
 export default function HerniatedDiscPage() {
   const blocks = buildServicePageJsonLd(HERNIATED_DISC_CONTENT, {
     datePublished: "2022-07-21T00:00:00+00:00",
@@ -32,6 +39,7 @@ export default function HerniatedDiscPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/conditions-treated/herniated-disc"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -43,5 +51,6 @@ export default function HerniatedDiscPage() {
       ))}
       <ServicePageTemplate content={HERNIATED_DISC_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

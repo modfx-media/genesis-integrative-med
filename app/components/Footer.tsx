@@ -17,10 +17,12 @@ export default function Footer({
   reviewsUrl = CONTACT.reviewsUrl,
   rating,
   reviewCount,
+  links = FOOTER_LINKS,
 }: {
   reviewsUrl?: string;
   rating?: number;
   reviewCount?: number;
+  links?: readonly { label: string; href: string }[];
 } = {}) {
   const year = new Date().getFullYear();
   const reviewsLabel =
@@ -106,7 +108,7 @@ export default function Footer({
               Explore
             </p>
             <ul className="mt-5 space-y-3 text-sm">
-              {FOOTER_LINKS.map((link) => (
+              {links.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}

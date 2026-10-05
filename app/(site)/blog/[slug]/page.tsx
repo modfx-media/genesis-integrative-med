@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+import { queryRoutedContentByPath } from "@/lib/cms/queries";
+
 import BlogPostTemplate from "@/app/components/blog/BlogPostTemplate";
 import { BLOG_POST_BODIES, BLOG_POST_SLUGS } from "@/app/lib/blog-post-bodies";
 import { getBlogPost } from "@/app/lib/blog-post-content";
@@ -20,6 +24,10 @@ type PageProps = {
  * Ranked CMS integration is disabled; this always resolves from local content.
  */
 async function resolvePost(slug: string): Promise<BlogPostContent | undefined> {
+  const routed = await queryRoutedContentByPath(`/blog/${slug}`);
+  if (routed?.collection === "posts" && routed.doc.content && typeof routed.doc.content === "object") {
+    return routed.doc.content as BlogPostContent;
+  }
   const local = getBlogPost(slug) ?? BLOG_POST_BODIES[slug];
   if (local) return local;
   const ranked = await getPublishedBlogPost(slug);
@@ -37,8 +45,8 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await resolvePost(slug);
-  if (!post) return {};
-  return {
+  if (!post) return cmsMetadata(`/blog/${slug}`, {});
+  return cmsMetadata(`/blog/${slug}`, {
     title: post.meta.title,
     description: post.meta.description,
     alternates: { canonical: post.meta.canonical },
@@ -62,7 +70,7 @@ export async function generateMetadata({
       description: post.meta.description,
       images: post.meta.ogImage ? [post.meta.ogImage] : undefined,
     },
-  };
+  });
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -118,6 +126,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   ];
 
   return (
+    <CMSRoute path={`/blog/${slug}`}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -128,5 +137,6 @@ export default async function BlogPostPage({ params }: PageProps) {
       ))}
       <BlogPostTemplate post={post} />
     </>
+  </CMSRoute>
   );
 }

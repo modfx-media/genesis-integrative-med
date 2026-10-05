@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import AboutPageView from "@/app/components/about/AboutPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL = "https://genesisintegrativemed.com/about-practice/";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: "Our Approach to Holistic Healing & Medicine in Geneva, IL",
   description:
     "Discover how Genesis Integrative Medicine changes lives every day in Geneva, IL. We focus on fixing the source of your discomfort. Join our healthy community.",
@@ -31,6 +34,10 @@ export const metadata: Metadata = {
       "Discover how Genesis Integrative Medicine changes lives every day in Geneva, IL. We focus on fixing the source of your discomfort. Join our healthy community.",
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/about-practice", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -70,6 +77,7 @@ const jsonLd = [
 
 export default function AboutPracticePage() {
   return (
+    <CMSRoute path={"/about-practice"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -81,5 +89,6 @@ export default function AboutPracticePage() {
       ))}
       <AboutPageView />
     </>
+  </CMSRoute>
   );
 }

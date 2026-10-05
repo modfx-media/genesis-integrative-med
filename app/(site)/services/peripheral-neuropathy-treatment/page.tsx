@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { PERIPHERAL_NEUROPATHY_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: PERIPHERAL_NEUROPATHY_CONTENT.meta.title,
   description: PERIPHERAL_NEUROPATHY_CONTENT.meta.description,
   alternates: { canonical: PERIPHERAL_NEUROPATHY_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/peripheral-neuropathy-treatment", FALLBACK_METADATA);
+}
+
 export default function PeripheralNeuropathyPage() {
   // Page is structured as prose (single H2 "Q & A" wrapping the body). No formal FAQ block.
   const blocks = buildServicePageJsonLd(PERIPHERAL_NEUROPATHY_CONTENT, {
@@ -33,6 +40,7 @@ export default function PeripheralNeuropathyPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/services/peripheral-neuropathy-treatment"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -44,5 +52,6 @@ export default function PeripheralNeuropathyPage() {
       ))}
       <ServicePageTemplate content={PERIPHERAL_NEUROPATHY_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

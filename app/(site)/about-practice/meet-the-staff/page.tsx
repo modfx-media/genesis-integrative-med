@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import TeamPageView from "@/app/components/team/TeamPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL =
   "https://genesisintegrativemed.com/about-practice/meet-the-staff/";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: "Get to Know Our Expert Care Team",
   description:
     "Meet the staff at Genesis Integrative Medicine to see how we care for your health. Our experts work together to provide a great experience. Schedule a visit now.",
@@ -33,6 +36,9 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/about-practice/meet-the-staff", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -191,6 +197,7 @@ const STAFF = [
 
 export default function MeetTheStaffPage() {
   return (
+    <CMSRoute path={"/about-practice/meet-the-staff"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -213,5 +220,6 @@ export default function MeetTheStaffPage() {
         members={STAFF}
       />
     </>
+  </CMSRoute>
   );
 }

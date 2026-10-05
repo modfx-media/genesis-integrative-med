@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { ALLERGY_TESTING_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: ALLERGY_TESTING_CONTENT.meta.title,
   description: ALLERGY_TESTING_CONTENT.meta.description,
   alternates: { canonical: ALLERGY_TESTING_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/allergy-testing-geneva", FALLBACK_METADATA);
+}
+
 export default function AllergyTestingPage() {
   // Page has no formal FAQ block; body is fully organized into H2 sections.
   const blocks = buildServicePageJsonLd(ALLERGY_TESTING_CONTENT, {
@@ -33,6 +40,7 @@ export default function AllergyTestingPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/services/allergy-testing-geneva"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -44,5 +52,6 @@ export default function AllergyTestingPage() {
       ))}
       <ServicePageTemplate content={ALLERGY_TESTING_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

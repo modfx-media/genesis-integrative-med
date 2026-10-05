@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import TeamPageView from "@/app/components/team/TeamPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL = "https://genesisintegrativemed.com/our-providers/";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: "Learn About Our Integrative Health Team in Geneva, IL",
   description:
     "Meet the team at Genesis Integrative Medicine for health solutions in Geneva, IL. We combine modern tools with natural methods. Visit us for a consultation.",
@@ -32,6 +35,9 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/our-providers", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -149,6 +155,7 @@ const PROVIDERS = [
 
 export default function OurProvidersPage() {
   return (
+    <CMSRoute path={"/our-providers"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -171,5 +178,6 @@ export default function OurProvidersPage() {
         members={PROVIDERS}
       />
     </>
+  </CMSRoute>
   );
 }

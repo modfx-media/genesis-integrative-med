@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import AreaCityHubView from "@/app/components/areas/AreaCityHubView";
 import { buildAreaCityJsonLd } from "@/app/components/services/service-jsonld";
 import {
@@ -29,7 +32,7 @@ export async function generateMetadata({
   const canonical = `${SITE_ORIGIN}${areaCityUrlPath(city.slug)}`;
   const title = `${city.name}, IL Chiropractic & Integrative Medicine`;
   const description = `Genesis Integrative Medicine serves ${city.name}, ${city.county} County, IL patients (about ${city.distanceMiles} miles / ${city.driveMinutes} min from Geneva). See treatments available and book a visit.`;
-  return {
+  return cmsMetadata(`/areas-we-serve/${citySlug}`, {
     title,
     description,
     alternates: { canonical },
@@ -42,7 +45,7 @@ export async function generateMetadata({
       locale: "en_US",
     },
     twitter: { card: "summary", title, description },
-  };
+  });
 }
 
 export default async function AreaCityPage({ params }: PageProps) {
@@ -59,6 +62,7 @@ export default async function AreaCityPage({ params }: PageProps) {
   });
 
   return (
+    <CMSRoute path={`/areas-we-serve/${citySlug}`}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -70,5 +74,6 @@ export default async function AreaCityPage({ params }: PageProps) {
       ))}
       <AreaCityHubView city={city} />
     </>
+  </CMSRoute>
   );
 }

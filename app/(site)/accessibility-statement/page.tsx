@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import LegalPageView from "@/app/components/legal/LegalPageView";
 import { ACCESSIBILITY_PAGE } from "@/app/lib/legal-content";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL = ACCESSIBILITY_PAGE.meta.canonical;
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: ACCESSIBILITY_PAGE.meta.title,
   description: ACCESSIBILITY_PAGE.meta.description,
   alternates: { canonical: CANONICAL },
@@ -24,6 +27,10 @@ export const metadata: Metadata = {
     description: ACCESSIBILITY_PAGE.meta.description,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/accessibility-statement", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -53,6 +60,7 @@ const jsonLd = [
 
 export default function AccessibilityStatementPage() {
   return (
+    <CMSRoute path={"/accessibility-statement"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -63,5 +71,6 @@ export default function AccessibilityStatementPage() {
       ))}
       <LegalPageView page={ACCESSIBILITY_PAGE} />
     </>
+  </CMSRoute>
   );
 }

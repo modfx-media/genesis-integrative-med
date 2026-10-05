@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ConditionsIndexView from "@/app/components/conditions/ConditionsIndexView";
 import { CONDITIONS_INDEX_META } from "@/app/lib/conditions-content";
 import { buildConditionsIndexJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: CONDITIONS_INDEX_META.title,
   description: CONDITIONS_INDEX_META.description,
   alternates: { canonical: CONDITIONS_INDEX_META.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/conditions-treated", FALLBACK_METADATA);
+}
+
 export default function ConditionsIndexPage() {
   const blocks = buildConditionsIndexJsonLd({
     title: CONDITIONS_INDEX_META.title,
@@ -35,6 +42,7 @@ export default function ConditionsIndexPage() {
     dateModified: CONDITIONS_INDEX_META.dateModified,
   });
   return (
+    <CMSRoute path={"/conditions-treated"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -46,5 +54,6 @@ export default function ConditionsIndexPage() {
       ))}
       <ConditionsIndexView />
     </>
+  </CMSRoute>
   );
 }

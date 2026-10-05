@@ -19,7 +19,11 @@ import {
  * for "Conditions Treated" and "Services", collapsible mobile drawer with
  * accordion sub-menus, and scroll-triggered backdrop.
  */
-export default function Header() {
+export default function Header({
+  navItems = PRIMARY_NAV,
+}: {
+  navItems?: readonly NavItem[];
+} = {}) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -131,7 +135,7 @@ export default function Header() {
             className="hidden flex-1 items-center justify-center lg:flex"
           >
             <ul className="flex flex-nowrap items-center">
-              {PRIMARY_NAV.map((item) => (
+              {navItems.map((item) => (
                 <NavItemDesktop
                   key={item.href}
                   item={item}
@@ -184,7 +188,7 @@ export default function Header() {
               </p>
               <nav aria-label="Mobile" className="mt-4">
                 <ul className="flex flex-col divide-y divide-white/10">
-                  {PRIMARY_NAV.map((item) => (
+                  {navItems.map((item) => (
                     <NavItemMobile
                       key={item.href}
                       item={item}

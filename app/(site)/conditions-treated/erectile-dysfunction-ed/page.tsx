@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { ED_CONDITION_CONTENT } from "@/app/lib/conditions-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: ED_CONDITION_CONTENT.meta.title,
   description: ED_CONDITION_CONTENT.meta.description,
   alternates: { canonical: ED_CONDITION_CONTENT.meta.canonicalOrigin },
@@ -27,6 +30,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/conditions-treated/erectile-dysfunction-ed", FALLBACK_METADATA);
+}
+
 export default function ErectileDysfunctionPage() {
   const blocks = buildServicePageJsonLd(ED_CONDITION_CONTENT, {
     datePublished: "2025-11-01T00:00:00+00:00",
@@ -34,6 +41,7 @@ export default function ErectileDysfunctionPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/conditions-treated/erectile-dysfunction-ed"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -45,5 +53,6 @@ export default function ErectileDysfunctionPage() {
       ))}
       <ServicePageTemplate content={ED_CONDITION_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import BlogIndexView from "@/app/components/blog/BlogIndexView";
 import { BLOG_INDEX_META } from "@/app/lib/blog-content";
 import { getBlogListing, pageCountFor, paginateItems } from "@/app/lib/ranked/to-site";
@@ -9,7 +12,7 @@ export const revalidate = 3600;
 
 const CANONICAL = BLOG_INDEX_META.canonicalOrigin;
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: BLOG_INDEX_META.title,
   description: BLOG_INDEX_META.description,
   alternates: { canonical: CANONICAL },
@@ -27,6 +30,10 @@ export const metadata: Metadata = {
     description: BLOG_INDEX_META.description,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/blog", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -59,6 +66,7 @@ export default async function BlogPage() {
   const totalPages = pageCountFor(listing.length);
   const posts = paginateItems(listing, 1);
   return (
+    <CMSRoute path={"/blog"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -70,5 +78,6 @@ export default async function BlogPage() {
       ))}
       <BlogIndexView posts={posts} currentPage={1} totalPages={totalPages} />
     </>
+  </CMSRoute>
   );
 }

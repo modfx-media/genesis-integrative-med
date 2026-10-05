@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import BookNowPageView from "@/app/components/booking/BookNowPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
@@ -9,7 +12,7 @@ const TITLE = "Book Now | Genesis Integrative Medicine";
 const DESCRIPTION =
   "Schedule your visit with Genesis Integrative Medicine in Geneva, IL. Pick a day and time that works for you, same-week appointments are often available.";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
@@ -27,6 +30,10 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/book-now", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -56,6 +63,7 @@ const jsonLd = [
 
 export default function BookNowPage() {
   return (
+    <CMSRoute path={"/book-now"}>
     <>
       <script
         type="application/ld+json"
@@ -63,5 +71,6 @@ export default function BookNowPage() {
       />
       <BookNowPageView />
     </>
+  </CMSRoute>
   );
 }

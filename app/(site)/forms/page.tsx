@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import FormsPageView from "@/app/components/forms/FormsPageView";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL = "https://genesisintegrativemed.com/forms/";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: "Patient Forms and Paperwork",
   description:
     "Prepare for your appointment at Genesis Integrative Medicine by filling out forms. Find knee pain and new patient paperwork for a faster check-in. Click here.",
@@ -27,6 +30,9 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/forms", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -59,6 +65,7 @@ const jsonLd = [
 
 export default function FormsPage() {
   return (
+    <CMSRoute path={"/forms"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -70,5 +77,6 @@ export default function FormsPage() {
       ))}
       <FormsPageView />
     </>
+  </CMSRoute>
   );
 }

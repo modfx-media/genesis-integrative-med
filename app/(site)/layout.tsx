@@ -6,11 +6,15 @@ import BookNowBanner from "@/app/components/BookNowBanner";
 import BookingPopupProvider from "@/app/components/booking/BookingPopupProvider";
 import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
-import { BRAND } from "@/app/lib/site-config";
+import { BRAND, type NavItem } from "@/app/lib/site-config";
 import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
 import { buildGoogleReviewsJsonLd } from "@/lib/google-reviews-jsonld";
-
-import "./globals.css";
+import {
+  getFooterGlobal,
+  getHeaderGlobal,
+  getSiteSettingsGlobal,
+} from "@/lib/cms/queries";
+import "../globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,13 +38,67 @@ export const metadata: Metadata = {
     "Integrative medicine in Geneva, IL, chiropractic, regenerative medicine, PRP, peptide weight loss, cold laser, and more.",
 };
 
+function mapNav(global: unknown): readonly NavItem[] | undefined {
+  if (!global || typeof global !== "object") return undefined;
+  const items = (global as { navItems?: unknown }).navItems;
+  if (!Array.isArray(items) || items.length === 0) return undefined;
+  const mapped: NavItem[] = [];
+  for (const item of items) {
+    if (!item || typeof item !== "object") continue;
+    const row = item as Record<string, unknown>;
+    const label = typeof row.label === "string" ? row.label : "";
+    const href = typeof row.href === "string" ? row.href : "";
+    if (!label || !href) continue;
+    const children = Array.isArray(row.children)
+      ? row.children.flatMap((child) => {
+          if (!child || typeof child !== "object") return [];
+          const c = child as Record<string, unknown>;
+          if (typeof c.label === "string" && typeof c.href === "string") {
+            return [{ label: c.label, href: c.href }];
+          }
+          return [];
+        })
+      : [];
+    mapped.push({
+      label,
+      href,
+      ...(children.length ? { children } : {}),
+    });
+  }
+  return mapped.length ? mapped : undefined;
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { reviews, meta } = await getDisplayedGoogleReviews();
+  const [{ reviews, meta }, headerGlobal, footerGlobal, settings] = await Promise.all([
+    getDisplayedGoogleReviews(),
+    getHeaderGlobal(),
+    getFooterGlobal(),
+    getSiteSettingsGlobal(),
+  ]);
   const reviewsJsonLd = buildGoogleReviewsJsonLd(reviews, meta);
+  const navItems = mapNav(headerGlobal);
+  const rawLinks =
+    footerGlobal && typeof footerGlobal === "object"
+      ? (footerGlobal as { links?: unknown }).links
+      : undefined;
+  const footerLinks = Array.isArray(rawLinks)
+    ? rawLinks
+        .filter((l): l is { label: string; href: string } =>
+          Boolean(l && typeof l === "object" && (l as { label?: string }).label && (l as { href?: string }).href),
+        )
+        .map((l) => ({ label: l.label, href: l.href }))
+    : undefined;
+  const settingsReviews =
+    settings &&
+    typeof settings === "object" &&
+    "reviewsUrl" in settings &&
+    typeof settings.reviewsUrl === "string"
+      ? settings.reviewsUrl
+      : undefined;
 
   return (
     <html
@@ -53,10 +111,11 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }}
         />
         <BookingPopupProvider>
-          <Header />
+          <Header navItems={navItems} />
           <main className="flex flex-1 flex-col">{children}</main>
           <Footer
-            reviewsUrl={meta.reviewsUrl}
+            links={footerLinks}
+            reviewsUrl={settingsReviews ?? meta.reviewsUrl}
             rating={meta.rating}
             reviewCount={meta.reviewCount}
           />

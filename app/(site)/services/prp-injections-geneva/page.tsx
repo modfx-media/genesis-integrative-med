@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { PRP_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: PRP_CONTENT.meta.title,
   description: PRP_CONTENT.meta.description,
   alternates: { canonical: PRP_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/prp-injections-geneva", FALLBACK_METADATA);
+}
+
 export default function PrpInjectionsPage() {
   // PRP page has no formal FAQ block on the live site.
   const blocks = buildServicePageJsonLd(PRP_CONTENT, {
@@ -33,6 +40,7 @@ export default function PrpInjectionsPage() {
     faqEnabled: false,
   });
   return (
+    <CMSRoute path={"/services/prp-injections-geneva"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -44,5 +52,6 @@ export default function PrpInjectionsPage() {
       ))}
       <ServicePageTemplate content={PRP_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

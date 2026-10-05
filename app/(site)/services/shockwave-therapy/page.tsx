@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { SHOCKWAVE_THERAPY_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: SHOCKWAVE_THERAPY_CONTENT.meta.title,
   description: SHOCKWAVE_THERAPY_CONTENT.meta.description,
   alternates: { canonical: SHOCKWAVE_THERAPY_CONTENT.meta.canonicalOrigin },
@@ -32,6 +35,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/shockwave-therapy", FALLBACK_METADATA);
+}
+
 export default function ShockwaveTherapyPage() {
   const blocks = buildServicePageJsonLd(SHOCKWAVE_THERAPY_CONTENT, {
     datePublished: "2026-07-25T00:00:00+00:00",
@@ -39,6 +46,7 @@ export default function ShockwaveTherapyPage() {
     faqEnabled: true,
   });
   return (
+    <CMSRoute path={"/services/shockwave-therapy"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -50,5 +58,6 @@ export default function ShockwaveTherapyPage() {
       ))}
       <ServicePageTemplate content={SHOCKWAVE_THERAPY_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

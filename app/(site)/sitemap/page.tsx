@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import { BLOG_POSTS, postHref } from "@/app/lib/blog-content";
 import {
   AREA_CITIES,
@@ -71,7 +74,7 @@ function SitemapSection({
   );
 }
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: "Sitemap",
   description:
     "A full index of every page on the Genesis Integrative Medicine website, including every service, condition, and area we serve.",
@@ -79,6 +82,10 @@ export const metadata: Metadata = {
   // Navigational aid for users/crawlers, not meant to rank on its own.
   robots: { index: false, follow: true },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/sitemap", FALLBACK_METADATA);
+}
 
 /**
  * /sitemap/ &mdash; a human-readable index of every page on the site,
@@ -89,6 +96,7 @@ export default function SitemapPage() {
     1 + AREA_CITIES.length + AREA_CITIES.length * AREA_TOPICS.length;
 
   return (
+    <CMSRoute path={"/sitemap"}>
     <article className="bg-white">
       <nav
         aria-label="Breadcrumb"
@@ -221,5 +229,6 @@ export default function SitemapPage() {
         </SitemapSection>
       </div>
     </article>
+  </CMSRoute>
   );
 }

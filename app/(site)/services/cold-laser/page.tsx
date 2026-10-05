@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ServicePageTemplate from "@/app/components/services/ServicePageTemplate";
 import { COLD_LASER_CONTENT } from "@/app/lib/services-content";
 import { buildServicePageJsonLd } from "@/app/components/services/service-jsonld";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: COLD_LASER_CONTENT.meta.title,
   description: COLD_LASER_CONTENT.meta.description,
   alternates: { canonical: COLD_LASER_CONTENT.meta.canonicalOrigin },
@@ -25,6 +28,10 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/services/cold-laser", FALLBACK_METADATA);
+}
+
 export default function ColdLaserPage() {
   const blocks = buildServicePageJsonLd(COLD_LASER_CONTENT, {
     datePublished: "2022-07-21T00:00:00+00:00",
@@ -32,6 +39,7 @@ export default function ColdLaserPage() {
     faqEnabled: true,
   });
   return (
+    <CMSRoute path={"/services/cold-laser"}>
     <>
       {blocks.map((block, i) => (
         <script
@@ -43,5 +51,6 @@ export default function ColdLaserPage() {
       ))}
       <ServicePageTemplate content={COLD_LASER_CONTENT} />
     </>
+  </CMSRoute>
   );
 }

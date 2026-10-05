@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 
+import { CMSRoute } from "@/lib/cms/CMSRoute";
+import { cmsMetadata } from "@/lib/cms/metadata";
+
 import ContactPageView from "@/app/components/contact/ContactPageView";
 import { CONTACT, SITE_ORIGIN } from "@/app/lib/site-config";
 
@@ -9,7 +12,7 @@ const TITLE = "Contact | Genesis Integrative Medicine";
 const DESCRIPTION =
   "Contact Genesis Integrative Medicine in Geneva, IL. Book online, call 630-845-8925, or visit our clinic at 1881 S. Randall Rd, Suite C, Geneva, IL 60134.";
 
-export const metadata: Metadata = {
+const FALLBACK_METADATA: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
@@ -27,6 +30,10 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
   },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return cmsMetadata("/contact", FALLBACK_METADATA);
+}
 
 const jsonLd = [
   {
@@ -103,6 +110,7 @@ const jsonLd = [
 
 export default function ContactPage() {
   return (
+    <CMSRoute path={"/contact"}>
     <>
       {jsonLd.map((block, i) => (
         <script
@@ -114,5 +122,6 @@ export default function ContactPage() {
       ))}
       <ContactPageView />
     </>
+  </CMSRoute>
   );
 }
