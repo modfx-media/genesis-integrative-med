@@ -2,14 +2,13 @@ import type { PayloadRequest } from "payload";
 import { getPayload } from "payload";
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
-import { NextRequest } from "next/server";
 
 import configPromise from "@payload-config";
 import { normalizeCmsPath, toPublicPath } from "@/lib/cms/urls";
 
-export async function GET(req: NextRequest) {
+export async function GET(request: Request) {
   const payload = await getPayload({ config: configPromise });
-  const { searchParams } = new URL(req.url);
+  const { searchParams } = new URL(request.url);
   const path = searchParams.get("path");
   const previewSecret = searchParams.get("previewSecret");
 
@@ -17,16 +16,26 @@ export async function GET(req: NextRequest) {
     return new Response("You are not allowed to preview this page", { status: 403 });
   }
 
+  if (!path || path.includes("null") || path.includes("undefined")) {
+    return new Response("Invalid path", { status: 400 });
+  }
+
+  if (!path.startsWith("/")) {
+    return new Response("This endpoint can only be used for relative previews", {
+      status: 400,
+    });
+  }
+
   const normalized = normalizeCmsPath(path);
   if (!normalized) {
-    return new Response("Insufficient search params", { status: 404 });
+    return new Response("Invalid path", { status: 400 });
   }
 
   let user;
   try {
     const authResult = await payload.auth({
-      req: req as unknown as PayloadRequest,
-      headers: req.headers,
+      req: request as unknown as PayloadRequest,
+      headers: request.headers,
     });
     user = authResult.user;
   } catch (error) {

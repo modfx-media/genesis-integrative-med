@@ -18,6 +18,8 @@ export type RoutedDoc = {
 export async function queryRoutedContentByPath(
   publicOrCmsPath: string,
 ): Promise<RoutedDoc | null> {
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return null;
+  if (!process.env.PAYLOAD_SECRET) return null;
   return withCMS(async () => {
     const payload = await getCMS();
     const draftEnabled = (await draftMode()).isEnabled;
@@ -50,6 +52,8 @@ export async function queryRoutedContentByPath(
 }
 
 export async function queryPublishedPagesForSitemap() {
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return [] as Record<string, unknown>[];
+  if (!process.env.PAYLOAD_SECRET) return [] as Record<string, unknown>[];
   return withCMS(async () => {
     const payload = await getCMS();
     const result = await payload.find({
@@ -71,6 +75,8 @@ export async function queryPublishedPagesForSitemap() {
 }
 
 export async function queryPublishedPostsForSitemap() {
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return [] as Record<string, unknown>[];
+  if (!process.env.PAYLOAD_SECRET) return [] as Record<string, unknown>[];
   return withCMS(async () => {
     const payload = await getCMS();
     const result = await payload.find({
@@ -92,6 +98,8 @@ export async function queryPublishedPostsForSitemap() {
 }
 
 export async function getHeaderGlobal() {
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return null;
+  if (!process.env.PAYLOAD_SECRET) return null;
   return withCMS(async () => {
     const payload = await getCMS();
     return payload.findGlobal({ slug: "header", draft: false });
@@ -99,6 +107,8 @@ export async function getHeaderGlobal() {
 }
 
 export async function getFooterGlobal() {
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return null;
+  if (!process.env.PAYLOAD_SECRET) return null;
   return withCMS(async () => {
     const payload = await getCMS();
     return payload.findGlobal({ slug: "footer", draft: false });
@@ -106,6 +116,8 @@ export async function getFooterGlobal() {
 }
 
 export async function getSiteSettingsGlobal() {
+  if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return null;
+  if (!process.env.PAYLOAD_SECRET) return null;
   return withCMS(async () => {
     const payload = await getCMS();
     return payload.findGlobal({ slug: "site-settings", draft: false });

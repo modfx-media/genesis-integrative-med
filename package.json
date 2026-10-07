@@ -13,6 +13,8 @@
     "generate:types": "payload generate:types",
     "cms:export": "tsx scripts/cms-export.ts",
     "cms:import": "tsx scripts/cms-import.ts",
+    "cms:bootstrap": "tsx scripts/cms-bootstrap.ts",
+    "cms:ensure-admin": "tsx scripts/cms-ensure-admin-user.ts",
     "cms:validate-export": "tsx scripts/cms-validate-export.ts"
   },
   "dependencies": {

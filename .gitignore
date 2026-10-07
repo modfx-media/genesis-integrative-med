@@ -42,5 +42,5 @@ yarn-error.log*
 next-env.d.ts
 
 # payload local uploads
-/public/media
+/public/media/*
 !/public/media/.gitkeep

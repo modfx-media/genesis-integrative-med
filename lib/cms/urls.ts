@@ -5,6 +5,7 @@ export function getPublicOrigin(): string {
   if (server && !isLocalhost(server)) return stripSlash(server);
   const site = process.env.NEXT_PUBLIC_SITE_URL;
   if (site && !isLocalhost(site)) return stripSlash(site);
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   if (process.env.NODE_ENV === "production") return PRODUCTION_ORIGIN;
   return "http://localhost:3000";
 }

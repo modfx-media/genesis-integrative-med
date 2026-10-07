@@ -1,9 +1,6 @@
 import { readFileSync } from "fs";
 import path from "path";
 import { config as loadEnv } from "dotenv";
-import { getPayload } from "payload";
-
-import config from "../payload.config";
 
 loadEnv({ path: path.join(process.cwd(), ".env.local") });
 loadEnv();
@@ -26,7 +23,7 @@ function hasApplyFlag(argv: string[]): boolean {
 }
 
 async function findExisting(
-  payload: Awaited<ReturnType<typeof getPayload>>,
+  payload: Awaited<ReturnType<typeof import("payload").getPayload>>,
   collection: "pages" | "posts",
   rec: ImportRecord,
 ) {
@@ -52,6 +49,10 @@ async function findExisting(
 
 async function main() {
   const apply = hasApplyFlag(process.argv);
+  if (apply) {
+    process.env.CMS_IMPORT_APPLY = "1";
+  }
+
   const fileArg =
     process.argv.filter((a) => !a.startsWith("-") && a.endsWith(".json")).at(-1) ??
     path.join(process.cwd(), "data", "content-export.json");
@@ -73,6 +74,9 @@ async function main() {
     return;
   }
 
+  // Load Payload only after dotenv + CMS_IMPORT_APPLY so push stays off and DB URL is set.
+  const { getPayload } = await import("payload");
+  const { default: config } = await import("../payload.config");
   const payload = await getPayload({ config });
 
   const pages = raw.records.filter((r) => r.collection === "pages");

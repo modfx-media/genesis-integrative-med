@@ -28,10 +28,13 @@ function connectionString(): string {
   );
 }
 
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
 export default buildConfig({
   admin: {
     importMap: {
       baseDir: path.resolve(dirname),
+      importMapFile: path.resolve(dirname, "app/(payload)/admin/importMap.js"),
     },
     user: Users.slug,
     livePreview: {
@@ -45,7 +48,8 @@ export default buildConfig({
   collections: [Users, Media, Pages, Posts],
   globals: [Header, Footer, SiteSettings],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || "invalid-secret-replace-in-env-xxxxxxxx",
+  // Empty when unset so /admin fails loudly instead of booting with a placeholder secret.
+  secret: process.env.PAYLOAD_SECRET || "",
   serverURL: getPublicOrigin(),
   cors: corsOrigins(),
   csrf: corsOrigins(),
@@ -62,22 +66,26 @@ export default buildConfig({
         typeof doc?.title === "string" ? doc.title : "Genesis Integrative Medicine",
       generateURL: ({ doc }) => {
         const origin = getPublicOrigin();
-        const pathValue =
+        const raw =
           typeof doc?.path === "string"
             ? doc.path
             : typeof doc?.slug === "string"
               ? `/${doc.slug}`
-              : "/";
-        if (pathValue === "/") return `${origin}/`;
-        const trimmed = pathValue.replace(/\/+$/, "");
+              : null;
+        if (!raw || raw.includes("null") || raw.includes("undefined")) return "";
+        if (raw === "/") return `${origin}/`;
+        const trimmed = raw.replace(/\/+$/, "");
         return `${origin}${trimmed.startsWith("/") ? trimmed : `/${trimmed}`}/`;
       },
     }),
-    vercelBlobStorage({
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
-      collections: { media: true },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }),
+    ...(blobToken
+      ? [
+          vercelBlobStorage({
+            collections: { media: true },
+            token: blobToken,
+          }),
+        ]
+      : []),
   ],
   sharp,
   typescript: {
