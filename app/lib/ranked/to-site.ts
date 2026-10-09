@@ -17,6 +17,7 @@ function categoryFromTitle(title: string): string {
   if (t.includes('shoulder')) return 'Shoulder Pain'
   if (t.includes('heel') || t.includes('plantar') || t.includes('foot')) return 'Foot Pain'
   if (t.includes('arthritis')) return 'Arthritis'
+  if (t.includes('joint')) return 'Joint Pain'
   if (t.includes('back')) return 'Back Pain'
   if (t.includes('neck')) return 'Neck Pain'
   if (t.includes('regenerative') || t.includes('stem cell')) return 'Regenerative Medicine'

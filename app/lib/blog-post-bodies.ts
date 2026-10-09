@@ -8095,6 +8095,7 @@ export const BLOG_POST_BODIES: Readonly<Record<string, BlogPostContent>> = {
 };
 
 export const BLOG_POST_SLUGS: readonly string[] = [
+  "stop-daily-habits-that-increase-joint-pain-fast",
   "prp-candidates-for-arthritis-and-sports-injuries",
   "medical-weight-loss-options-in-geneva-il-explained",
   "geneva-disc-pain-care-non-surgical-and-surgical-paths",

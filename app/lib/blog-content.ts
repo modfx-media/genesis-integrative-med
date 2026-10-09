@@ -71,6 +71,14 @@ export function postsByCategory(category: string): readonly BlogPost[] {
  */
 export const BLOG_POSTS: readonly BlogPost[] = [
   {
+    slug: "stop-daily-habits-that-increase-joint-pain-fast",
+    title: "Stop Daily Habits That Increase Joint Pain Fast",
+    date: "2026-10-05",
+    excerpt: "Everyday Habits That Quietly Damage Your Joints Joint pain rarely shows up out of nowhere. It usually builds slowly as small aches during the day, then suddenly you realize climbing stairs or reaching overhead feels harder than it used to\u2026",
+    image: "/images/blog/stop-daily-habits-that-increase-joint-pain-fast.jpeg",
+    category: "Joint Pain",
+  },
+  {
     slug: "prp-candidates-for-arthritis-and-sports-injuries",
     title: "PRP Candidates for Arthritis and Sports Injuries",
     date: "2026-09-28",
