@@ -7,6 +7,8 @@ import { getPublishedBlogSlugs } from "@/app/lib/ranked/posts";
 import { queryPublishedPagesForSitemap, queryPublishedPostsForSitemap } from "@/lib/cms/queries";
 import { toPublicPath } from "@/lib/cms/urls";
 
+
+export const revalidate = 300;
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://genesisintegrativemed.com";
 
 type Entry = MetadataRoute.Sitemap[number];

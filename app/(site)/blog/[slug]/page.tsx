@@ -13,7 +13,7 @@ import { getPublishedBlogPost, getPublishedBlogSlugs } from "@/app/lib/ranked/po
 import { rankedToBlogPostContent } from "@/app/lib/ranked/to-site";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 export const dynamicParams = true;
 
 type PageProps = {
