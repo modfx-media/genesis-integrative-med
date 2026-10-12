@@ -2,18 +2,18 @@
 import config from "@payload-config";
 import "@payloadcms/next/css";
 import type { ServerFunctionClient } from "payload";
-import {
-  handleServerFunctions,
-  metadata,
-  RootLayout,
-} from "@payloadcms/next/layouts";
+import type { Metadata } from "next";
+import { handleServerFunctions, RootLayout } from "@payloadcms/next/layouts";
 import React from "react";
 
 import { importMap } from "./admin/importMap.js";
 import "./custom.css";
 
 export const dynamic = "force-dynamic";
-export { metadata };
+export const metadata: Metadata = {
+  title: "Genesis Integrative Medicine CMS",
+  robots: { index: false, follow: false },
+};
 
 type Args = {
   children: React.ReactNode;
