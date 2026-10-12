@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Genesis Integrative Medicine
 
-## Getting Started
+Next.js App Router marketing site with Payload CMS 3 as the content data plane. Designed pages stay as the visual fallback until a document is **published**.
 
-First, run the development server:
+## Local development
 
 ```bash
+cp .env.example .env.local
+# Set PAYLOAD_SECRET, PREVIEW_SECRET, and Neon pooled DATABASE_URL
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Public site: http://localhost:3000
+- Admin: http://localhost:3000/admin
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## CMS scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script | Purpose |
+|---|---|
+| `npm run cms:export` | Rebuild `data/content-export.json` from hardcoded content |
+| `npm run cms:validate-export` | Ensure export covers every editorial sitemap path |
+| `npm run cms:import -- --apply` | Idempotent draft import (`CMS_IMPORT_APPLY=1`) |
+| `npm run cms:ensure-admin` | Create/reset local admin user |
+| `npm run cms:bootstrap` | Ping Payload + create first admin if missing |
+| `npm run generate:types` | Regenerate `payload-types.ts` |
+| `npm run generate:importmap` | Regenerate Payload admin import map |
 
-## Learn More
+Import defaults to **draft**. Do not bulk-publish over designed pages.
 
-To learn more about Next.js, take a look at the following resources:
+## Vercel / Neon checklist (ops)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Set on Production **and** Preview:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `PAYLOAD_SECRET`
+- `PREVIEW_SECRET`
+- `DATABASE_URL` (Neon **pooled** `*-pooler.*`)
+- `NEXT_PUBLIC_SITE_URL` / `NEXT_PUBLIC_SERVER_URL` = `https://genesisintegrativemed.com` (never localhost)
+- `BLOB_READ_WRITE_TOKEN` (otherwise `/media` 404s in production)
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+After env changes, redeploy and confirm `curl -I /admin` is not 500. A healthy homepage with a 500 `/admin` usually means missing `PAYLOAD_SECRET` or pooled `DATABASE_URL`.

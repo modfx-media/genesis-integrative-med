@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
+import { withPayload } from "@payloadcms/next/withPayload";
 
 const nextConfig: NextConfig = {
-  // Enforce trailing slashes on every URL so /about-practice/ etc. stay canonical.
   trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   images: {
     qualities: [75, 90, 92, 95, 100],
     remotePatterns: [
@@ -16,6 +17,12 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "*": ["./public/images/**", "./public/**/*.mp4", "./public/**/*.webm"],
   },
+  serverExternalPackages: [
+    "pg",
+    "@payloadcms/db-vercel-postgres",
+    "@neondatabase/serverless",
+    "@vercel/postgres",
+  ],
 };
 
-export default nextConfig;
+export default withPayload(nextConfig, { devBundleServerPackages: false });
