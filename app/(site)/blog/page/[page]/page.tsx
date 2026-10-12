@@ -6,7 +6,7 @@ import { BLOG_INDEX_META } from "@/app/lib/blog-content";
 import { getBlogListing, pageCountFor, paginateItems } from "@/app/lib/ranked/to-site";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
 
-export const revalidate = 3600;
+export const revalidate = 300;
 export const dynamicParams = true;
 
 type PageProps = {

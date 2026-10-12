@@ -13,6 +13,7 @@ import { Users } from "./collections/Users";
 import { Footer, Header, SiteSettings } from "./globals/Site";
 import { corsOrigins, getPublicOrigin } from "./lib/cms/urls";
 
+import { scheduledPublishPlugin } from "./scheduled-publish";
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
@@ -59,6 +60,7 @@ export default buildConfig({
     push: !isVercel && !isImport && process.env.NODE_ENV !== "production",
   }),
   plugins: [
+    scheduledPublishPlugin(),
     seoPlugin({
       collections: ["pages", "posts"],
       uploadsCollection: "media",

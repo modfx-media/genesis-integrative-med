@@ -18,6 +18,8 @@ import {
   SERVICES_SUBNAV,
 } from "@/app/lib/site-config";
 
+
+export const revalidate = 300;
 /** Plain internal-nav-only pages that don't already appear in a subnav list above. */
 const MAIN_PAGES = [
   { label: "Home", href: "/" },
