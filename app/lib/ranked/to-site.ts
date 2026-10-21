@@ -3,6 +3,7 @@ import { getPublishedBlogPosts } from './posts'
 import type { BlogPostData } from './types'
 import { isRemoteImage, POSTS_PER_PAGE, type BlogPost } from '@/app/lib/blog-content'
 import type { BlogPostContent } from '@/app/lib/blog-post-content'
+import { listPublishedCmsCards } from '@/lib/cms/blog-posts'
 
 function categoryFromTitle(title: string): string {
   const t = title.toLowerCase()
@@ -88,8 +89,18 @@ export function paginateItems<T>(items: readonly T[], page: number): readonly T[
 }
 
 export async function getBlogListing(): Promise<BlogPost[]> {
-  const posts = await getPublishedBlogPosts()
-  return [...posts]
-    .sort((a, b) => b.publishDate.localeCompare(a.publishDate) || a.slug.localeCompare(b.slug))
-    .map(rankedToBlogPost)
+  const [posts, cmsCards] = await Promise.all([
+    getPublishedBlogPosts(),
+    listPublishedCmsCards().catch(() => [] as BlogPost[]),
+  ])
+  const bySlug = new Map<string, BlogPost>()
+  for (const post of posts) {
+    bySlug.set(post.slug, rankedToBlogPost(post))
+  }
+  for (const card of cmsCards) {
+    if (!bySlug.has(card.slug)) bySlug.set(card.slug, card)
+  }
+  return [...bySlug.values()].sort(
+    (a, b) => b.date.localeCompare(a.date) || a.slug.localeCompare(b.slug),
+  )
 }

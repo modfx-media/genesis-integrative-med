@@ -76,7 +76,7 @@ export default async function BlogPage() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
         />
       ))}
-      <BlogIndexView posts={posts} currentPage={1} totalPages={totalPages} />
+      <BlogIndexView posts={posts} catalog={listing} currentPage={1} totalPages={totalPages} />
     </>
   </CMSRoute>
   );
