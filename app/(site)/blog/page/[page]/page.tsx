@@ -99,7 +99,7 @@ export default async function BlogPageNumber({ params }: PageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(block) }}
         />
       ))}
-      <BlogIndexView posts={posts} currentPage={num} totalPages={total} />
+      <BlogIndexView posts={posts} catalog={listing} currentPage={num} totalPages={total} />
     </>
   );
 }

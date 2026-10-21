@@ -81,17 +81,12 @@ export async function queryPublishedPostsForSitemap() {
     const payload = await getCMS();
     const result = await payload.find({
       collection: "posts",
-      where: {
-        and: [
-          { _status: { equals: "published" } },
-          { noIndex: { not_equals: true } },
-          { excludeFromSitemap: { not_equals: true } },
-        ],
-      },
+      where: { _status: { equals: "published" } },
       limit: 5000,
       depth: 0,
       draft: false,
       overrideAccess: false,
+      pagination: false,
     });
     return result.docs as unknown as Record<string, unknown>[];
   }, [] as Record<string, unknown>[]);

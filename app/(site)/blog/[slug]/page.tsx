@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cache } from "react";
 
 import { CMSRoute } from "@/lib/cms/CMSRoute";
 import { cmsMetadata } from "@/lib/cms/metadata";
-import { queryRoutedContentByPath } from "@/lib/cms/queries";
 
 import BlogPostTemplate from "@/app/components/blog/BlogPostTemplate";
 import { BLOG_POST_BODIES, BLOG_POST_SLUGS } from "@/app/lib/blog-post-bodies";
@@ -12,6 +12,7 @@ import type { BlogPostContent } from "@/app/lib/blog-post-content";
 import { getPublishedBlogPost, getPublishedBlogSlugs } from "@/app/lib/ranked/posts";
 import { rankedToBlogPostContent } from "@/app/lib/ranked/to-site";
 import { SITE_ORIGIN } from "@/app/lib/site-config";
+import { getCmsBlogPost, listPublishedCmsSlugs } from "@/lib/cms/blog-posts";
 
 export const revalidate = 300;
 export const dynamicParams = true;
@@ -21,22 +22,24 @@ type PageProps = {
 };
 
 /**
- * Ranked CMS integration is disabled; this always resolves from local content.
+ * Compiled articles keep their designed bodies. Payload posts that are not
+ * already compiled resolve from the CMS at /blog/<document slug>/.
  */
-async function resolvePost(slug: string): Promise<BlogPostContent | undefined> {
-  const routed = await queryRoutedContentByPath(`/blog/${slug}`);
-  if (routed?.collection === "posts" && routed.doc.content && typeof routed.doc.content === "object") {
-    return routed.doc.content as BlogPostContent;
-  }
+const resolvePost = cache(async (slug: string): Promise<BlogPostContent | undefined> => {
   const local = getBlogPost(slug) ?? BLOG_POST_BODIES[slug];
   if (local) return local;
+  const cms = await getCmsBlogPost(slug);
+  if (cms) return cms;
   const ranked = await getPublishedBlogPost(slug);
   return ranked ? rankedToBlogPostContent(ranked) : undefined;
-}
+});
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const ranked = await getPublishedBlogSlugs().catch(() => []);
-  const slugs = new Set<string>([...BLOG_POST_SLUGS, ...ranked]);
+  const [ranked, cms] = await Promise.all([
+    getPublishedBlogSlugs().catch(() => [] as string[]),
+    listPublishedCmsSlugs().catch(() => [] as string[]),
+  ]);
+  const slugs = new Set<string>([...BLOG_POST_SLUGS, ...ranked, ...cms]);
   return [...slugs].map((slug) => ({ slug }));
 }
 

@@ -3,6 +3,10 @@ import type { CollectionConfig } from "payload";
 import { authenticated, authenticatedOrPublished } from "./access";
 import { emptyToNull } from "../lib/cms/empty-to-null";
 import { previewFromPath } from "../lib/cms/preview";
+import {
+  revalidateBlogAfterPostChange,
+  revalidateBlogAfterPostDelete,
+} from "../lib/cms/revalidate-blog";
 import { normalizeCmsPath } from "../lib/cms/urls";
 
 const seoExtras = [
@@ -232,6 +236,8 @@ export const Posts: CollectionConfig = {
         return data;
       },
     ],
+    afterChange: [revalidateBlogAfterPostChange],
+    afterDelete: [revalidateBlogAfterPostDelete],
   },
   versions: {
     drafts: {

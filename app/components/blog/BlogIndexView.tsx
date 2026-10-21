@@ -14,9 +14,7 @@ import {
 import { CONTACT } from "@/app/lib/site-config";
 import { CONSULTATION_CTA, INSURANCE_MISSION } from "@/app/lib/services-content";
 import {
-  BLOG_POSTS,
   formatPostDate,
-  getBlogCategories,
   isRemoteImage,
   pageHref,
   postHref,
@@ -27,20 +25,30 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 type BlogIndexViewProps = {
   posts: readonly BlogPost[];
+  /** Full listing used by the category filter. Defaults to the current page. */
+  catalog?: readonly BlogPost[];
   currentPage: number;
   totalPages: number;
 };
 
 export default function BlogIndexView({
   posts,
+  catalog,
   currentPage,
   totalPages,
 }: BlogIndexViewProps) {
-  const categories = useMemo(() => getBlogCategories(), []);
+  const source = catalog ?? posts;
+  const categories = useMemo(() => {
+    const names = new Set<string>();
+    for (const post of source) {
+      if (post.category) names.add(post.category);
+    }
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [source]);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   const filteredPosts = activeCategory
-    ? BLOG_POSTS.filter((post) => post.category === activeCategory)
+    ? source.filter((post) => post.category === activeCategory)
     : posts;
 
   return (
@@ -54,6 +62,7 @@ export default function BlogIndexView({
       />
       <PostsSection
         posts={filteredPosts}
+        catalog={source}
         currentPage={currentPage}
         totalPages={totalPages}
         showFeatured={currentPage === 1 && !activeCategory}
@@ -273,12 +282,14 @@ function Hero() {
 
 function PostsSection({
   posts,
+  catalog,
   currentPage,
   totalPages,
   showFeatured,
   activeCategory,
 }: {
   posts: readonly BlogPost[];
+  catalog: readonly BlogPost[];
   currentPage: number;
   totalPages: number;
   showFeatured: boolean;
@@ -298,7 +309,7 @@ function PostsSection({
   const usedSlugs = new Set(posts.map((post) => post.slug));
   const upcomingPosts =
     gapFillers > 0 && !activeCategory
-      ? BLOG_POSTS.filter((post) => !usedSlugs.has(post.slug)).slice(0, gapFillers)
+      ? catalog.filter((post) => !usedSlugs.has(post.slug)).slice(0, gapFillers)
       : [];
   const remainingFillers = activeCategory ? 0 : gapFillers - upcomingPosts.length;
   const nextPageHref =

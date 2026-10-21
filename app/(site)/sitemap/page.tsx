@@ -5,7 +5,8 @@ import Link from "next/link";
 import { CMSRoute } from "@/lib/cms/CMSRoute";
 import { cmsMetadata } from "@/lib/cms/metadata";
 
-import { BLOG_POSTS, postHref } from "@/app/lib/blog-content";
+import { postHref } from "@/app/lib/blog-content";
+import { getBlogListing } from "@/app/lib/ranked/to-site";
 import {
   AREA_CITIES,
   AREA_TOPICS,
@@ -93,7 +94,8 @@ export async function generateMetadata(): Promise<Metadata> {
  * /sitemap/ &mdash; a human-readable index of every page on the site,
  * including the full /areas-we-serve/ pSEO cluster grouped by city.
  */
-export default function SitemapPage() {
+export default async function SitemapPage() {
+  const blogPosts = await getBlogListing();
   const totalAreaLinks =
     1 + AREA_CITIES.length + AREA_CITIES.length * AREA_TOPICS.length;
 
@@ -211,9 +213,9 @@ export default function SitemapPage() {
           </div>
         </SitemapSection>
 
-        <SitemapSection heading="Blog Posts" count={BLOG_POSTS.length}>
+        <SitemapSection heading="Blog Posts" count={blogPosts.length}>
           <ul className="grid grid-cols-1 gap-x-6 gap-y-2 sm:grid-cols-2">
-            {BLOG_POSTS.map((post) => (
+            {blogPosts.map((post) => (
               <li key={post.slug}>
                 <Link
                   href={postHref(post.slug)}
