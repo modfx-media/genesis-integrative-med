@@ -90,7 +90,7 @@ export default function BookNowBanner() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 120, opacity: 0 }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-none fixed inset-x-0 bottom-0 z-40"
+          className="motion-reveal pointer-events-none fixed inset-x-0 bottom-0 z-40"
           style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
         >
           <div className="pointer-events-auto mx-auto flex max-w-6xl px-3 sm:px-6">

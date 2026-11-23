@@ -344,7 +344,7 @@ function ServiceHero({ content }: { content: ServicePageContent }) {
         {/* Image column */}
         {heroImage && (
           <motion.div
-            className={`relative lg:col-span-5 ${heroVideo ? "lg:mt-16" : ""}`}
+            className={`motion-reveal relative lg:col-span-5 ${heroVideo ? "lg:mt-16" : ""}`}
             initial={reduce ? false : { opacity: 0, y: 36, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.95, ease: EASE, delay: 0.15 }}
@@ -450,7 +450,7 @@ function ServiceHero({ content }: { content: ServicePageContent }) {
               initial={reduce ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: EASE, delay: 0.55 }}
-              className="absolute -bottom-6 -left-6 hidden max-w-[240px] rounded-2xl border border-brand-line bg-white/95 p-4 shadow-xl shadow-brand-navy/15 backdrop-blur md:block"
+              className="motion-reveal absolute -bottom-6 -left-6 hidden max-w-[240px] rounded-2xl border border-brand-line bg-white/95 p-4 shadow-xl shadow-brand-navy/15 backdrop-blur md:block"
             >
               <div className="flex items-center gap-3">
                 <span
@@ -1540,6 +1540,7 @@ function ConditionsSidebar({
             return (
               <motion.div
                 key={item.href}
+                className="motion-reveal"
                 initial={{ opacity: 0, x: -6 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
@@ -1908,7 +1909,7 @@ function FAQItem({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE }}
-            className="overflow-hidden"
+            className="motion-reveal overflow-hidden"
           >
             <p className="px-6 pb-6 text-sm leading-relaxed text-brand-ink/80 sm:text-base">
               {faq.answer}

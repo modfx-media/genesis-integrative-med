@@ -75,13 +75,18 @@ body.book-banner-open #kka-chat-widget {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
-    transform: none !important;
     filter: none !important;
+  }
+
+  /* Entrance transforms only. Layout translates (centered dots, menus) stay. */
+  .motion-reveal:not(.motion-reveal-keep-transform) {
+    transform: none !important;
   }
 
   .motion-loop,
   .animate-ping {
     animation: none !important;
     transition: none !important;
+    opacity: 1 !important;
   }
 }

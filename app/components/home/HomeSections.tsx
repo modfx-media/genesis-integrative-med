@@ -91,13 +91,13 @@ export function HomeHero({
       {/* Ambient blurs */}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-brand-sky/25 blur-3xl"
+        className="motion-loop pointer-events-none absolute -top-40 left-1/2 h-[600px] w-[900px] -translate-x-1/2 rounded-full bg-brand-sky/25 blur-3xl"
         animate={reduce ? undefined : { scale: [1, 1.06, 1], opacity: [0.55, 0.85, 0.55] }}
         transition={reduce ? undefined : { duration: 9, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -bottom-40 right-0 h-[420px] w-[520px] rounded-full bg-brand-cyan/20 blur-3xl"
+        className="motion-loop pointer-events-none absolute -bottom-40 right-0 h-[420px] w-[520px] rounded-full bg-brand-cyan/20 blur-3xl"
         animate={reduce ? undefined : { scale: [1, 1.1, 1], opacity: [0.55, 0.85, 0.55] }}
         transition={reduce ? undefined : { duration: 11, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
       />
@@ -168,7 +168,7 @@ export function HomeHero({
           style={{ y: parallaxY }}
         >
           <motion.div
-            className="relative overflow-hidden rounded-3xl border border-brand-line bg-white/90 p-6 shadow-2xl shadow-brand-navy/15 backdrop-blur-md sm:p-7"
+            className="motion-reveal relative overflow-hidden rounded-3xl border border-brand-line bg-white/90 p-6 shadow-2xl shadow-brand-navy/15 backdrop-blur-md sm:p-7"
             initial={reduce ? false : { opacity: 0, y: 40, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
@@ -176,13 +176,13 @@ export function HomeHero({
             {/* Ambient orb inside the card */}
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-cyan/15 blur-3xl"
+              className="motion-loop pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-brand-cyan/15 blur-3xl"
               animate={reduce ? undefined : { scale: [1, 1.12, 1], opacity: [0.55, 0.85, 0.55] }}
               transition={reduce ? undefined : { duration: 8, repeat: Infinity, ease: "easeInOut" }}
             />
             <motion.div
               aria-hidden
-              className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-brand-blue/15 blur-3xl"
+              className="motion-loop pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-brand-blue/15 blur-3xl"
               animate={reduce ? undefined : { scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
               transition={reduce ? undefined : { duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
             />
@@ -213,6 +213,7 @@ export function HomeHero({
               ].map((spec, i) => (
                 <motion.div
                   key={spec.label}
+                  className="motion-reveal"
                   initial={reduce ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.55 + i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -266,7 +267,7 @@ export function HomeHero({
             initial={reduce ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 1 }}
-            className="mt-8 grid grid-cols-3 gap-4 border-t border-brand-line/70 pt-6"
+            className="motion-reveal mt-8 grid grid-cols-3 gap-4 border-t border-brand-line/70 pt-6"
           >
             <TrustStat
               label="Years in Geneva"
@@ -423,7 +424,7 @@ export function ServicesShowcase() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                className="relative mt-6 aspect-[4/5] w-full overflow-hidden rounded-3xl bg-brand-mist shadow-2xl shadow-brand-navy/20"
+                className="motion-reveal relative mt-6 aspect-[4/5] w-full overflow-hidden rounded-3xl bg-brand-mist shadow-2xl shadow-brand-navy/20"
               >
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -432,7 +433,7 @@ export function ServicesShowcase() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0"
+                    className="motion-reveal absolute inset-0"
                   >
                     <Image
                       src={current.image}
@@ -1269,13 +1270,13 @@ export function SurgeriesSection() {
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -top-24 right-1/4 h-96 w-96 rounded-full bg-brand-blue/25 blur-3xl"
+        className="motion-loop pointer-events-none absolute -top-24 right-1/4 h-96 w-96 rounded-full bg-brand-blue/25 blur-3xl"
         animate={reduce ? undefined : { scale: [1, 1.1, 1], opacity: [0.55, 0.85, 0.55] }}
         transition={reduce ? undefined : { duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute -bottom-24 left-1/5 h-80 w-80 rounded-full bg-brand-cyan/15 blur-3xl"
+        className="motion-loop pointer-events-none absolute -bottom-24 left-1/5 h-80 w-80 rounded-full bg-brand-cyan/15 blur-3xl"
         animate={reduce ? undefined : { scale: [1, 1.15, 1], opacity: [0.5, 0.8, 0.5] }}
         transition={reduce ? undefined : { duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
@@ -1309,7 +1310,7 @@ export function SurgeriesSection() {
 
         {/* Comparison infographic */}
         <motion.div
-          className="relative mt-14 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent shadow-[0_30px_120px_-40px_rgba(0,184,230,0.35)] backdrop-blur-sm"
+          className="motion-reveal relative mt-14 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.03] to-transparent shadow-[0_30px_120px_-40px_rgba(0,184,230,0.35)] backdrop-blur-sm"
           initial={reduce ? false : { opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -1318,7 +1319,7 @@ export function SurgeriesSection() {
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr]">
             {/* Conventional panel */}
             <motion.div
-              className="relative p-8 sm:p-10"
+              className="motion-reveal relative p-8 sm:p-10"
               initial={reduce ? false : { opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
@@ -1342,7 +1343,7 @@ export function SurgeriesSection() {
                 {conventional.map(({ label, Icon }, i) => (
                   <motion.li
                     key={label}
-                    className="flex items-center gap-3 text-sm text-white/60"
+                    className="motion-reveal flex items-center gap-3 text-sm text-white/60"
                     initial={reduce ? false : { opacity: 0, x: -12 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
@@ -1390,6 +1391,7 @@ export function SurgeriesSection() {
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="motion-reveal"
                   initial={reduce ? false : { opacity: 0, x: -6 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
@@ -1426,6 +1428,7 @@ export function SurgeriesSection() {
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                  className="motion-reveal"
                   initial={reduce ? false : { opacity: 0, y: -6 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
@@ -1452,7 +1455,7 @@ export function SurgeriesSection() {
 
             {/* Integrative panel */}
             <motion.div
-              className="relative overflow-hidden p-8 sm:p-10"
+              className="motion-reveal relative overflow-hidden p-8 sm:p-10"
               initial={reduce ? false : { opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
@@ -1483,7 +1486,7 @@ export function SurgeriesSection() {
                 {integrative.map(({ label, Icon }, i) => (
                   <motion.li
                     key={label}
-                    className="flex items-center gap-3 text-sm text-white/90"
+                    className="motion-reveal flex items-center gap-3 text-sm text-white/90"
                     initial={reduce ? false : { opacity: 0, x: 12 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: "-80px" }}
@@ -1769,7 +1772,7 @@ export function DoctorSnippet() {
         <>
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute right-[6%] top-[14%] h-3 w-3 rounded-full bg-brand-cyan"
+            className="motion-loop pointer-events-none absolute right-[6%] top-[14%] h-3 w-3 rounded-full bg-brand-cyan"
             animate={{ y: [0, -14, 0], opacity: [0.6, 1, 0.6] }}
             transition={{ duration: 5, repeat: Infinity, ease: [0.16, 1, 0.3, 1] }}
           />
@@ -1781,7 +1784,7 @@ export function DoctorSnippet() {
           />
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute right-[14%] bottom-[18%] h-2.5 w-2.5 rounded-full bg-brand-blue"
+            className="motion-loop pointer-events-none absolute right-[14%] bottom-[18%] h-2.5 w-2.5 rounded-full bg-brand-blue"
             animate={{ y: [0, 12, 0], opacity: [0.4, 0.9, 0.4] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
           />
@@ -1809,7 +1812,7 @@ export function DoctorSnippet() {
                   {!reduce && (
                     <motion.span
                       aria-hidden
-                      className="absolute inset-x-0 bottom-1 -z-0 h-3 rounded-full bg-brand-cyan/25"
+                      className="motion-reveal absolute inset-x-0 bottom-1 -z-0 h-3 rounded-full bg-brand-cyan/25"
                       initial={{ scaleX: 0, originX: 0 }}
                       whileInView={{ scaleX: 1 }}
                       viewport={{ once: true }}
@@ -1878,6 +1881,7 @@ export function DoctorSnippet() {
                 strokeWidth="1.5"
                 strokeDasharray="4 6"
                 fill="none"
+                className="motion-reveal"
                 initial={{ pathLength: 0, opacity: 0 }}
                 whileInView={{ pathLength: 1, opacity: 1 }}
                 viewport={{ once: true, margin: "-80px" }}
@@ -1894,6 +1898,7 @@ export function DoctorSnippet() {
                   cy={c.cy}
                   r={4}
                   fill="#00A9E0"
+                  className="motion-reveal"
                   initial={{ opacity: 0, scale: 0 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -1914,7 +1919,7 @@ export function DoctorSnippet() {
                     delay: i * 0.12,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className={`group relative ${offsets[i] ?? ""}`}
+                  className={`motion-reveal group relative ${offsets[i] ?? ""}`}
                 >
                   <Link
                     href={p.href}
@@ -2222,7 +2227,7 @@ export function ConditionsStripSection({
                       delay: 0.15,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
+                    className="motion-reveal motion-reveal-keep-transform pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 lg:block"
                   >
                     <span className="relative flex h-4 w-4">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-blue opacity-50" />
@@ -2240,8 +2245,8 @@ export function ConditionsStripSection({
                     transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                     className={
                       isLeft
-                        ? "lg:col-span-6 lg:col-start-1 lg:pr-12"
-                        : "lg:col-span-6 lg:col-start-7 lg:pl-12"
+                        ? "motion-reveal lg:col-span-6 lg:col-start-1 lg:pr-12"
+                        : "motion-reveal lg:col-span-6 lg:col-start-7 lg:pl-12"
                     }
                   >
                     <Link
@@ -2472,7 +2477,7 @@ export function GetStartedSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ delay: 0.4, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute -top-3 right-6 rounded-full border border-brand-line bg-white px-4 py-2 shadow-lg shadow-brand-navy/10"
+                className="motion-reveal absolute -top-3 right-6 rounded-full border border-brand-line bg-white px-4 py-2 shadow-lg shadow-brand-navy/10"
               >
                 <span className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-brand-navy">
                   <span aria-hidden className="relative flex h-1.5 w-1.5">
@@ -2614,7 +2619,7 @@ export function ContactSection() {
                   whileInView={{ opacity: 1, x: 0, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute left-4 top-4 max-w-[240px] rounded-2xl border border-brand-line bg-white/95 p-4 shadow-2xl backdrop-blur-md"
+                  className="motion-reveal absolute left-4 top-4 max-w-[240px] rounded-2xl border border-brand-line bg-white/95 p-4 shadow-2xl backdrop-blur-md"
                 >
                   <div className="flex items-center gap-3">
                     <span
