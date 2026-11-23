@@ -70,9 +70,18 @@ body.book-banner-open #kka-chat-widget {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blog-card-reveal {
-    animation: none;
-    opacity: 1;
-    transform: none;
+  .blog-card-reveal,
+  .motion-reveal {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .motion-loop,
+  .animate-ping {
+    animation: none !important;
+    transition: none !important;
   }
 }

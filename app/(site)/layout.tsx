@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { MotionConfig } from "motion/react";
 import Script from "next/script";
 
 import BookNowBanner from "@/app/components/BookNowBanner";
@@ -110,17 +111,19 @@ export default async function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewsJsonLd) }}
         />
-        <BookingPopupProvider>
-          <Header navItems={navItems} />
-          <main className="flex flex-1 flex-col">{children}</main>
-          <Footer
-            links={footerLinks}
-            reviewsUrl={settingsReviews ?? meta.reviewsUrl}
-            rating={meta.rating}
-            reviewCount={meta.reviewCount}
-          />
-          <BookNowBanner />
-        </BookingPopupProvider>
+        <MotionConfig reducedMotion="user">
+          <BookingPopupProvider>
+            <Header navItems={navItems} />
+            <main className="flex flex-1 flex-col">{children}</main>
+            <Footer
+              links={footerLinks}
+              reviewsUrl={settingsReviews ?? meta.reviewsUrl}
+              rating={meta.rating}
+              reviewCount={meta.reviewCount}
+            />
+            <BookNowBanner />
+          </BookingPopupProvider>
+        </MotionConfig>
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-ECJR0J4REF"
