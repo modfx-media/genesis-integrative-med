@@ -27,15 +27,22 @@ import { getDisplayedGoogleReviews } from "@/lib/google-reviews";
 
 const CANONICAL = `${SITE_ORIGIN}/`;
 
+/**
+ * Approved published SEO title (`pages` path `/`, meta.title). The seed
+ * title in HOME_META is different; a CMS miss must not replace the live one.
+ * The string already includes the brand, so cmsMetadata emits it as absolute.
+ */
+const SEO_TITLE = "Integrative Medicine | Genesis Integrative Medicine";
+
 const FALLBACK_METADATA: Metadata = {
-  title: HOME_META.title,
+  title: SEO_TITLE,
   description: HOME_META.description,
   alternates: { canonical: CANONICAL },
   openGraph: {
     type: "website",
     url: CANONICAL,
     siteName: "Genesis Integrative Medicine",
-    title: HOME_META.title,
+    title: SEO_TITLE,
     description: HOME_META.description,
     images: [
       {

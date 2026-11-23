@@ -11,11 +11,18 @@ import { isFiveStarReview } from "@/lib/reviews";
 const CANONICAL = "https://genesisintegrativemed.com/testimonials/";
 
 const TITLE = "Testimonials | Genesis Integrative Medicine";
+/**
+ * Document title that was live before the published Payload page stopped
+ * resolving. It already includes the brand. cmsMetadata marks that absolute
+ * so the layout template cannot append the brand again.
+ */
+const SEO_TITLE =
+  "Patient Testimonials & Pain Recovery in Geneva, IL | Genesis Integrative Medicine";
 const DESCRIPTION =
   "Read 5-star Google reviews from patients of Genesis Integrative Medicine in Geneva, IL. Verified testimonials in their own words.";
 
 const FALLBACK_METADATA: Metadata = {
-  title: TITLE,
+  title: SEO_TITLE,
   description: DESCRIPTION,
   alternates: { canonical: CANONICAL },
   openGraph: {

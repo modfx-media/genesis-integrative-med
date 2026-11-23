@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 
+import { titleForLayout, withLayoutSafeTitle } from "./document-title";
 import { queryRoutedContentByPath } from "./queries";
 
 function str(value: unknown): string | undefined {
@@ -16,8 +17,9 @@ export async function cmsMetadata(
   path: string,
   fallback: Metadata,
 ): Promise<Metadata> {
+  const safeFallback = withLayoutSafeTitle(fallback);
   const routed = await queryRoutedContentByPath(path);
-  if (!routed) return fallback;
+  if (!routed) return safeFallback;
   const doc = routed.doc;
   const meta = metaGroup(doc);
   const title = str(meta.title) ?? str(doc.title);
@@ -28,11 +30,11 @@ export async function cmsMetadata(
   const ogImage = meta.image;
 
   const next: Metadata = {
-    ...fallback,
-    ...(title ? { title } : {}),
+    ...safeFallback,
+    ...(title ? { title: titleForLayout(title) } : {}),
     ...(description ? { description } : {}),
     alternates: {
-      ...fallback.alternates,
+      ...safeFallback.alternates,
       ...(canonical ? { canonical } : {}),
     },
     robots: {

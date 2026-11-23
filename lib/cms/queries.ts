@@ -20,10 +20,21 @@ export async function queryRoutedContentByPath(
 ): Promise<RoutedDoc | null> {
   if (!process.env.DATABASE_URL && !process.env.POSTGRES_URL) return null;
   if (!process.env.PAYLOAD_SECRET) return null;
+  const path = fromPublicPath(publicOrCmsPath);
   return withCMS(async () => {
     const payload = await getCMS();
-    const draftEnabled = (await draftMode()).isEnabled;
-    const path = fromPublicPath(publicOrCmsPath);
+    // draftMode() throws outside a request scope. That must not abort the
+    // published lookup, or every page falls back and branded titles double.
+    let draftEnabled = false;
+    try {
+      draftEnabled = (await draftMode()).isEnabled;
+    } catch (error) {
+      console.error(
+        "[cms] draftMode unavailable; reading published content",
+        path,
+        error,
+      );
+    }
     const findOpts = {
       limit: 1,
       depth: 1,
@@ -48,7 +59,7 @@ export async function queryRoutedContentByPath(
     if (post) return { collection: "posts", doc: post as unknown as Record<string, unknown> };
 
     return null;
-  }, null);
+  }, null, `routed content ${path}`);
 }
 
 export async function queryPublishedPagesForSitemap() {
@@ -71,7 +82,7 @@ export async function queryPublishedPagesForSitemap() {
       overrideAccess: false,
     });
     return result.docs as unknown as Record<string, unknown>[];
-  }, [] as Record<string, unknown>[]);
+  }, [] as Record<string, unknown>[], "published pages for sitemap");
 }
 
 export async function queryPublishedPostsForSitemap() {
@@ -89,7 +100,7 @@ export async function queryPublishedPostsForSitemap() {
       pagination: false,
     });
     return result.docs as unknown as Record<string, unknown>[];
-  }, [] as Record<string, unknown>[]);
+  }, [] as Record<string, unknown>[], "published posts for sitemap");
 }
 
 export async function getHeaderGlobal() {
@@ -98,7 +109,7 @@ export async function getHeaderGlobal() {
   return withCMS(async () => {
     const payload = await getCMS();
     return payload.findGlobal({ slug: "header", draft: false });
-  }, null);
+  }, null, "header global");
 }
 
 export async function getFooterGlobal() {
@@ -107,7 +118,7 @@ export async function getFooterGlobal() {
   return withCMS(async () => {
     const payload = await getCMS();
     return payload.findGlobal({ slug: "footer", draft: false });
-  }, null);
+  }, null, "footer global");
 }
 
 export async function getSiteSettingsGlobal() {
@@ -116,5 +127,5 @@ export async function getSiteSettingsGlobal() {
   return withCMS(async () => {
     const payload = await getCMS();
     return payload.findGlobal({ slug: "site-settings", draft: false });
-  }, null);
+  }, null, "site settings global");
 }
