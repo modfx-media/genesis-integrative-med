@@ -42,7 +42,7 @@ const loadPublishedCmsPosts = cache(async (): Promise<BlogPostContent[]> => {
       page += 1;
     }
     return posts;
-  }, []);
+  }, [], "published posts");
 });
 
 export async function listPublishedCmsPosts(): Promise<BlogPostContent[]> {
@@ -67,7 +67,12 @@ export async function getCmsBlogPost(slug: string): Promise<BlogPostContent | nu
     let draftEnabled = false;
     try {
       draftEnabled = (await draftMode()).isEnabled;
-    } catch {
+    } catch (error) {
+      console.error(
+        "[cms] draftMode unavailable during blog post lookup",
+        slug,
+        error,
+      );
       draftEnabled = false;
     }
     const findOpts = {
@@ -104,5 +109,5 @@ export async function getCmsBlogPost(slug: string): Promise<BlogPostContent | nu
         canonical: `${siteOrigin()}/blog/${post.slug}/`,
       },
     };
-  }, null);
+  }, null, `blog post ${slug}`);
 }
