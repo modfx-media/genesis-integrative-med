@@ -1,3 +1,5 @@
+import { SITE_ORIGIN } from "@/app/lib/site-config";
+
 /**
  * Blog post content data source.
  *
@@ -81,6 +83,31 @@ export type BlogPostContent = {
     readonly ogImage?: string;
   };
 };
+
+/** Live document URL for a post. Derived from the slug, not the old WordPress path. */
+export function blogPostCanonical(slug: string): string {
+  return `${SITE_ORIGIN.replace(/\/$/, "")}/blog/${slug}/`;
+}
+
+/**
+ * Drop a short "Genesis" brand stub so the layout title template can add
+ * "Genesis Integrative Medicine" once. Visible headings are left alone.
+ */
+export function blogDocumentTitle(title: string): string {
+  let next = title.trim();
+  next = next.replace(/\s*\|\s*Genesis\s*$/i, "");
+  next = next.replace(
+    /\s*:\s*Genesis(?:\s+Integrative Medicine|\s+Medicine)?\s*$/i,
+    "",
+  );
+  next = next.replace(/\s+-\s+Genesis(?:\s+Medicine)?\s*$/i, "");
+  next = next.replace(/\s+\b(?:by|at)\s+Genesis\s*$/i, "");
+  next = next.replace(/\s*\(\s*Genesis\s*\)\s*$/i, "");
+  next = next.replace(/\s+with Genesis(?=\s+in\b)/i, "");
+  next = next.replace(/\?\s*Genesis'\s+/i, "? ");
+  next = next.replace(/^Genesis:\s+/i, "");
+  return next.replace(/\s{2,}/g, " ").trim();
+}
 
 /** Utility to slugify a section heading into a stable anchor id. */
 export function sectionAnchor(heading: string): string {

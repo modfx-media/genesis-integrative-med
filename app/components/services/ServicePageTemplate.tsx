@@ -5,10 +5,10 @@ import Link from "next/link";
 import {
   AnimatePresence,
   motion,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useRef, useState, type CSSProperties } from "react";
 
 import {

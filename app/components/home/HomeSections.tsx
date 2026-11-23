@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useMotionTemplate, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useMotionTemplate } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useEffect, useRef, useState } from "react";
 
 import {

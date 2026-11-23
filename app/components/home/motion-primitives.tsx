@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform, type Variants } from "motion/react";
+import { motion, useInView, useMotionValue, useSpring, useTransform, type Variants } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useEffect, useRef, useState } from "react";
 
 import { INSURANCE } from "@/app/lib/home-content";

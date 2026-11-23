@@ -4,11 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   motion,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
 } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useMemo, useRef } from "react";
 
 import BookNowTrigger from "@/app/components/booking/BookNowTrigger";
