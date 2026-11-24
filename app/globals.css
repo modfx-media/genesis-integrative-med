@@ -72,17 +72,10 @@ body.book-banner-open #kka-chat-widget {
 @media (prefers-reduced-motion: reduce) {
   .blog-card-reveal,
   .motion-reveal {
-    /* Longhands only. `animation: none` is minified away together with
-       these, and WebKit does not reset iteration-count when the base
-       value is a custom property (var(--animate-ping) is infinite).
-       A 0s infinite animation then allocates until the tab dies. */
-    animation-name: none !important;
-    animation-iteration-count: 1 !important;
-    animation-play-state: paused !important;
+    animation: none !important;
     transition: none !important;
     opacity: 1 !important;
     filter: none !important;
-    will-change: auto !important;
   }
 
   /* Entrance transforms only. Layout translates (centered dots, menus) stay. */
@@ -92,21 +85,31 @@ body.book-banner-open #kka-chat-widget {
 
   .motion-loop,
   .animate-ping {
-    animation-name: none !important;
-    animation-iteration-count: 1 !important;
-    animation-play-state: paused !important;
+    animation: none !important;
     transition: none !important;
     opacity: 1 !important;
-    filter: none !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    will-change: auto !important;
   }
 
-  /* Ambient orbs are filter: blur(). Without the filter they are hard
-     ellipses. A static mask keeps the wash and is not an animation. */
-  .motion-loop.blur-3xl {
-    -webkit-mask-image: radial-gradient(closest-side, #000 18%, transparent 72%);
-    mask-image: radial-gradient(closest-side, #000 18%, transparent 72%);
+  /* opacity: 1 on .motion-reveal reveals every backdrop-filter at once.
+     WebKit's compositor grows without bound past ~20 of those layers.
+     Split @supports so Lightning CSS keeps both the prefixed and
+     unprefixed declarations (one rule gets collapsed to a single property). */
+  @supports (-webkit-backdrop-filter: none) {
+    * {
+      -webkit-backdrop-filter: none !important;
+    }
+  }
+  @supports (backdrop-filter: none) {
+    * {
+      backdrop-filter: none !important;
+    }
+  }
+
+  /* Photo chips used the blur as their only solid backing. */
+  .bg-black\/30[class*="backdrop-blur"],
+  .bg-brand-ink\/60[class*="backdrop-blur"],
+  .bg-white\/10[class*="backdrop-blur"],
+  .bg-white\/5[class*="backdrop-blur"] {
+    background-color: rgb(10 25 41 / 0.9) !important;
   }
 }
