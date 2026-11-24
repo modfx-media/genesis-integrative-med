@@ -72,10 +72,17 @@ body.book-banner-open #kka-chat-widget {
 @media (prefers-reduced-motion: reduce) {
   .blog-card-reveal,
   .motion-reveal {
-    animation: none !important;
+    /* Longhands only. `animation: none` is minified away together with
+       these, and WebKit does not reset iteration-count when the base
+       value is a custom property (var(--animate-ping) is infinite).
+       A 0s infinite animation then allocates until the tab dies. */
+    animation-name: none !important;
+    animation-iteration-count: 1 !important;
+    animation-play-state: paused !important;
     transition: none !important;
     opacity: 1 !important;
     filter: none !important;
+    will-change: auto !important;
   }
 
   /* Entrance transforms only. Layout translates (centered dots, menus) stay. */
@@ -85,8 +92,21 @@ body.book-banner-open #kka-chat-widget {
 
   .motion-loop,
   .animate-ping {
-    animation: none !important;
+    animation-name: none !important;
+    animation-iteration-count: 1 !important;
+    animation-play-state: paused !important;
     transition: none !important;
     opacity: 1 !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    will-change: auto !important;
+  }
+
+  /* Ambient orbs are filter: blur(). Without the filter they are hard
+     ellipses. A static mask keeps the wash and is not an animation. */
+  .motion-loop.blur-3xl {
+    -webkit-mask-image: radial-gradient(closest-side, #000 18%, transparent 72%);
+    mask-image: radial-gradient(closest-side, #000 18%, transparent 72%);
   }
 }
