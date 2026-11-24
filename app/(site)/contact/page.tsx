@@ -4,6 +4,7 @@ import { CMSRoute } from "@/lib/cms/CMSRoute";
 import { cmsMetadata } from "@/lib/cms/metadata";
 
 import ContactPageView from "@/app/components/contact/ContactPageView";
+import { HOME_META } from "@/app/lib/home-content";
 import { CONTACT, SITE_ORIGIN } from "@/app/lib/site-config";
 
 const CANONICAL = "https://genesisintegrativemed.com/contact/";
@@ -23,11 +24,13 @@ const FALLBACK_METADATA: Metadata = {
     url: CANONICAL,
     siteName: "Genesis Integrative Medicine",
     locale: "en_US",
+    images: [{ url: HOME_META.ogImage }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    images: [HOME_META.ogImage],
   },
 };
 

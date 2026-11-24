@@ -180,7 +180,7 @@ export default function Header({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[68px] bottom-0 z-40 overflow-y-auto bg-brand-ink text-white lg:hidden"
+            className="motion-reveal fixed inset-x-0 top-[68px] bottom-0 z-40 overflow-y-auto bg-brand-ink text-white lg:hidden"
           >
             <div className="mx-auto max-w-xl px-6 py-8">
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-sky">
@@ -366,7 +366,7 @@ function NavItemDesktop({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className={`absolute left-1/2 top-full z-50 mt-3 -translate-x-1/2 ${
+            className={`motion-reveal motion-reveal-keep-transform absolute left-1/2 top-full z-50 mt-3 -translate-x-1/2 ${
               item.children.length <= 3
                 ? "w-[min(92vw,320px)]"
                 : "w-[min(92vw,580px)]"
@@ -505,7 +505,7 @@ function NavItemMobile({
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
+            className="motion-reveal overflow-hidden"
           >
             <li>
               <Link

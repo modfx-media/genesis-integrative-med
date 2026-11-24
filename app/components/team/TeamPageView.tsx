@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   motion,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useRef } from "react";
 
 import BookNowTrigger from "@/app/components/booking/BookNowTrigger";
@@ -258,7 +258,7 @@ function Hero({
         {/* Image column */}
         {heroImage && (
           <motion.div
-            className="relative lg:col-span-5"
+            className="motion-reveal relative lg:col-span-5"
             initial={reduce ? false : { opacity: 0, y: 36, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.95, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
@@ -305,7 +305,7 @@ function Hero({
               initial={reduce ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: 0.55 }}
-              className="absolute -bottom-6 -left-6 hidden max-w-[240px] rounded-2xl border border-brand-line bg-white/95 p-4 shadow-xl shadow-brand-navy/15 backdrop-blur md:block"
+              className="motion-reveal absolute -bottom-6 -left-6 hidden max-w-[240px] rounded-2xl border border-brand-line bg-white/95 p-4 shadow-xl shadow-brand-navy/15 backdrop-blur md:block"
             >
               <div className="flex items-center gap-3">
                 <span
@@ -451,7 +451,7 @@ function MemberPhoto({
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.85, ease: EASE }}
-      className={`relative lg:col-span-5 ${imageOnRight ? "lg:order-2" : "lg:order-1"}`}
+      className={`motion-reveal relative lg:col-span-5 ${imageOnRight ? "lg:order-2" : "lg:order-1"}`}
     >
       <div className="relative mx-auto max-w-md">
         {/* Image frame */}

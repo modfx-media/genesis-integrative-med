@@ -7,7 +7,7 @@ import { cmsMetadata } from "@/lib/cms/metadata";
 
 import BlogPostTemplate from "@/app/components/blog/BlogPostTemplate";
 import { BLOG_POST_BODIES, BLOG_POST_SLUGS } from "@/app/lib/blog-post-bodies";
-import { getBlogPost } from "@/app/lib/blog-post-content";
+import { blogDocumentTitle, blogPostCanonical, getBlogPost } from "@/app/lib/blog-post-content";
 import type { BlogPostContent } from "@/app/lib/blog-post-content";
 import { getPublishedBlogPost, getPublishedBlogSlugs } from "@/app/lib/ranked/posts";
 import { rankedToBlogPostContent } from "@/app/lib/ranked/to-site";
@@ -47,17 +47,30 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const canonical = blogPostCanonical(slug);
   const post = await resolvePost(slug);
-  if (!post) return cmsMetadata(`/blog/${slug}`, {});
-  return cmsMetadata(`/blog/${slug}`, {
-    title: post.meta.title,
+  if (!post) {
+    const metadata = await cmsMetadata(`/blog/${slug}`, {
+      alternates: { canonical },
+    });
+    return {
+      ...metadata,
+      alternates: { ...metadata.alternates, canonical },
+      openGraph: metadata.openGraph
+        ? { ...metadata.openGraph, url: canonical }
+        : { url: canonical },
+    };
+  }
+  const title = blogDocumentTitle(post.meta.title);
+  const metadata = await cmsMetadata(`/blog/${slug}`, {
+    title,
     description: post.meta.description,
-    alternates: { canonical: post.meta.canonical },
+    alternates: { canonical },
     openGraph: {
       type: "article",
-      title: post.meta.title,
+      title,
       description: post.meta.description,
-      url: post.meta.canonical,
+      url: canonical,
       siteName: "Genesis Integrative Medicine",
       locale: "en_US",
       publishedTime: `${post.date}T17:00:03+00:00`,
@@ -69,11 +82,34 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: post.meta.title,
+      title,
       description: post.meta.description,
       images: post.meta.ogImage ? [post.meta.ogImage] : undefined,
     },
   });
+  const resolvedTitle =
+    typeof metadata.title === "string" ? blogDocumentTitle(metadata.title) : metadata.title;
+  const openGraphTitle =
+    metadata.openGraph && typeof metadata.openGraph.title === "string"
+      ? blogDocumentTitle(metadata.openGraph.title)
+      : metadata.openGraph?.title;
+  return {
+    ...metadata,
+    title: resolvedTitle,
+    alternates: { ...metadata.alternates, canonical },
+    openGraph: metadata.openGraph
+      ? { ...metadata.openGraph, title: openGraphTitle, url: canonical }
+      : { url: canonical },
+    twitter: metadata.twitter
+      ? {
+          ...metadata.twitter,
+          title:
+            typeof metadata.twitter.title === "string"
+              ? blogDocumentTitle(metadata.twitter.title)
+              : metadata.twitter.title,
+        }
+      : metadata.twitter,
+  };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -81,7 +117,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const post = await resolvePost(slug);
   if (!post) notFound();
 
-  const canonical = post.meta.canonical;
+  const canonical = blogPostCanonical(slug);
   const jsonLd = [
     {
       "@context": "https://schema.org",

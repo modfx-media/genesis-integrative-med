@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useInView, useMotionValue, useReducedMotion, useSpring, useTransform, type Variants } from "motion/react";
+import { motion, useInView, useMotionValue, useSpring, useTransform, type Variants } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useEffect, useRef, useState } from "react";
 
 import { INSURANCE } from "@/app/lib/home-content";
@@ -59,7 +60,7 @@ export function Reveal({
   const M = motion[Tag] as typeof motion.div;
   return (
     <M
-      className={className}
+      className={className ? `motion-reveal ${className}` : "motion-reveal"}
       initial={reduce ? false : { opacity: 0, y, filter: "blur(4px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-80px" }}
@@ -115,7 +116,7 @@ export function StaggerItem({
 }) {
   return (
     <motion.div
-      className={className}
+      className={className ? `motion-reveal ${className}` : "motion-reveal"}
       variants={{
         hidden: { opacity: 0, y },
         visible: {
@@ -310,7 +311,7 @@ export function Marquee({
       style={{ maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)" }}
     >
       <motion.div
-        className={`flex shrink-0 gap-6 pr-6 ${pauseOnHover ? "group-hover:[animation-play-state:paused]" : ""}`}
+        className={`motion-loop flex shrink-0 gap-6 pr-6 ${pauseOnHover ? "group-hover:[animation-play-state:paused]" : ""}`}
         animate={reduce ? undefined : { x: xKeyframes }}
         transition={reduce ? undefined : { duration: speed, ease: "linear", repeat: Infinity }}
       >

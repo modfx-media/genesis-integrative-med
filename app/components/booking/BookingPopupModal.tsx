@@ -26,7 +26,7 @@ export default function BookingPopupModal({
           role="dialog"
           aria-modal="true"
           aria-label={FORM_TITLE}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+          className="motion-reveal fixed inset-0 z-[100] flex items-center justify-center p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -43,7 +43,7 @@ export default function BookingPopupModal({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="relative flex max-h-[85vh] w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-brand-line bg-white shadow-2xl shadow-brand-navy/30 sm:max-w-md"
+            className="motion-reveal relative flex max-h-[85vh] w-full max-w-sm flex-col overflow-hidden rounded-3xl border border-brand-line bg-white shadow-2xl shadow-brand-navy/30 sm:max-w-md"
           >
             {/* Header */}
             <div className="flex shrink-0 items-center justify-between gap-3 border-b border-brand-line bg-gradient-to-r from-brand-mist/70 to-white px-5 py-3.5">

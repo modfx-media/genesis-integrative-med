@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { usePrefersReducedMotion as useReducedMotion } from "@/app/lib/use-prefers-reduced-motion";
 import { useRef } from "react";
 
 import {
@@ -275,6 +276,7 @@ function Toc({
             return (
               <motion.div
                 key={id}
+                className="motion-reveal"
                 initial={{ opacity: 0, x: -6 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
