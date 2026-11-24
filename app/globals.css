@@ -89,4 +89,27 @@ body.book-banner-open #kka-chat-widget {
     transition: none !important;
     opacity: 1 !important;
   }
+
+  /* opacity: 1 on .motion-reveal reveals every backdrop-filter at once.
+     WebKit's compositor grows without bound past ~20 of those layers.
+     Split @supports so Lightning CSS keeps both the prefixed and
+     unprefixed declarations (one rule gets collapsed to a single property). */
+  @supports (-webkit-backdrop-filter: none) {
+    * {
+      -webkit-backdrop-filter: none !important;
+    }
+  }
+  @supports (backdrop-filter: none) {
+    * {
+      backdrop-filter: none !important;
+    }
+  }
+
+  /* Photo chips used the blur as their only solid backing. */
+  .bg-black\/30[class*="backdrop-blur"],
+  .bg-brand-ink\/60[class*="backdrop-blur"],
+  .bg-white\/10[class*="backdrop-blur"],
+  .bg-white\/5[class*="backdrop-blur"] {
+    background-color: rgb(10 25 41 / 0.9) !important;
+  }
 }
