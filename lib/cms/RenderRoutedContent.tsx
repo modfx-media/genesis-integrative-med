@@ -6,6 +6,8 @@ import LegalPageView from "@/app/components/legal/LegalPageView";
 import type { LegalPage } from "@/app/lib/legal-content";
 import type { ServicePageContent } from "@/app/lib/services-content";
 
+import { canReplaceDesignedPage } from "./designed-page";
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
@@ -25,8 +27,8 @@ function asLegalPage(content: unknown): LegalPage | null {
 }
 
 /**
- * Overlay designed templates when a published CMS doc has usable structured content.
- * Otherwise return the hardcoded page (designed UI stays until content is ready).
+ * Overlay a designed page only when `canReplaceDesignedPage` allows it.
+ * Otherwise return the hardcoded page.
  */
 export function RenderRoutedContent({
   collection,
@@ -37,13 +39,9 @@ export function RenderRoutedContent({
   doc: Record<string, unknown>;
   fallback: ReactNode;
 }) {
-  const content = doc.content;
-  if (collection === "posts") {
-    // Blog routes render the normalized post themselves. Raw CMS JSON is not
-    // the template shape and previously crashed the page (HTTP 500).
-    return fallback;
-  }
+  if (!canReplaceDesignedPage({ collection, doc })) return fallback;
 
+  const content = doc.content;
   const template = typeof doc.template === "string" ? doc.template : "";
   if (
     template === "service" ||
