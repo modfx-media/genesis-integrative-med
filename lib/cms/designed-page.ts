@@ -1,12 +1,17 @@
 /**
  * Designed-page guard.
  *
- * `CMSRoute` wraps hardcoded pages and can replace them when a published
- * document matches an overlay template. Home and the other marketing
- * templates are not overlay templates: a publish (the live home page is
- * published) must leave the designed UI in place. Service, condition, area
- * combo, lipo, and legal pages are replaced only when `content` has the full
- * template shape. SEO-only content, including `{ meta: { title } }`, does not.
+ * A published service, condition, area-combo, lipo, or legal document is
+ * rendered with the same designed components the route already uses:
+ * `ServicePageTemplate` or `LegalPageView`. Those components supply the
+ * markup and styling. The CMS document supplies the content props (hero,
+ * sections, breadcrumbs, and the rest of that content object). This is not
+ * a generic or unstyled renderer.
+ *
+ * The route is replaced only when `content` has a hero, sections, and
+ * breadcrumbs, so a SEO-only publish cannot swap in an empty shell. Home
+ * and the other marketing templates have no overlay and always keep their
+ * designed tree. The published home page is one of those.
  */
 
 const OVERLAY_TEMPLATES = new Set(["service", "condition", "areaCombo", "lipo", "legal"]);

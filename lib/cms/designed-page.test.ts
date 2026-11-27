@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 
 import { canReplaceDesignedPage } from "./designed-page";
@@ -52,6 +53,14 @@ const LEGAL_CONTENT = {
 };
 
 describe("designed-page guard", () => {
+  it("renders a complete overlay with the designed template components", () => {
+    const source = readFileSync(new URL("./RenderRoutedContent.tsx", import.meta.url), "utf8");
+    assert.match(source, /import ServicePageTemplate from "@\/app\/components\/services\/ServicePageTemplate"/);
+    assert.match(source, /import LegalPageView from "@\/app\/components\/legal\/LegalPageView"/);
+    assert.match(source, /<ServicePageTemplate content=\{page\} \/>/);
+    assert.match(source, /<LegalPageView page=\{page\} \/>/);
+  });
+
   it("keeps the published home page on its designed route", () => {
     assert.equal(canReplaceDesignedPage(PUBLISHED_HOME), false);
   });
