@@ -5,6 +5,7 @@ import { describe, it } from "node:test";
 import type { Metadata } from "next";
 
 import { BRAND } from "../../app/lib/site-config";
+import { withLayoutSafeTitle } from "./document-title";
 import { resolveCmsMetadata } from "./resolve-metadata";
 
 const require = createRequire(import.meta.url);
@@ -185,6 +186,18 @@ const CMS_DESCRIPTION =
   );
 
 describe("CMS metadata titles", () => {
+  it("keeps a branded fallback absolute so the layout template cannot double it", () => {
+    const safe = withLayoutSafeTitle(HOME);
+    assert.deepEqual(safe.title, {
+      absolute: "Multidisciplinary Medicine | Genesis Integrative Medicine",
+    });
+    assert.equal(
+      renderedDocumentTitle(safe.title),
+      "Multidisciplinary Medicine | Genesis Integrative Medicine",
+    );
+    assert.equal(withLayoutSafeTitle(LOCATION).title, LOCATION.title);
+  });
+
   it("matches the site layout title template", () => {
     const layout = readFileSync(new URL("../../app/(site)/layout.tsx", import.meta.url), "utf8");
     assert.match(layout, /template:\s*`%s \| \$\{BRAND\.name\}`/);
